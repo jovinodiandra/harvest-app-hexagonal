@@ -13,7 +13,7 @@ RUN npm install
 COPY . .
 
 # Build arguments for environment variables
-ARG VITE_API_URL=http://localhost:8080
+ARG VITE_API_URL=https://harvest-app-hexagonal.onrender.com
 ARG VITE_USE_MOCK_API=false
 
 # Set environment variables for build
