@@ -1,0 +1,39 @@
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+*.iml
+
+# Build outputs
+**/target
+**/node_modules
+**/dist
+**/.svelte-kit
+
+# Logs
+**/*.log
+
+# Environment files (use docker-compose env vars instead)
+**/.env
+**/.env.local
+**/.env.*.local
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Documentation
+*.md
+!README.md
+
+# Test files
+**/*test*
+**/*spec*
+
+# Misc
+.DS_Store
+Thumbs.db

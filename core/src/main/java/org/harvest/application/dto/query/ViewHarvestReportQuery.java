@@ -1,0 +1,14 @@
+package org.harvest.application.dto.query;
+
+import org.harvest.application.port.outbound.security.UserSession;
+
+import java.time.LocalDate;
+import java.util.UUID;
+
+public record ViewHarvestReportQuery(
+        UserSession session,
+        UUID pondId,
+        LocalDate startDate,
+        LocalDate endDate
+) {
+}

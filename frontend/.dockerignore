@@ -1,0 +1,32 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+.svelte-kit
+
+# IDE
+.idea
+.vscode
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Git
+.git
+.gitignore
+
+# Docker files
+Dockerfile
+.dockerignore
+
+# Misc
+.DS_Store
+Thumbs.db
+*.md
