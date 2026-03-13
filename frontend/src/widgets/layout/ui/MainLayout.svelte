@@ -1,22 +1,34 @@
 <script lang="ts">
+  import { untrack } from 'svelte';
   import Sidebar from '../../sidebar/ui/Sidebar.svelte';
   import Header from '../../header/ui/Header.svelte';
 
-  export let currentPath: string = '/';
-  export let pageTitle: string = 'Dashboard';
+  interface Props {
+    currentPath?: string;
+    pageTitle?: string;
+    children?: import('svelte').Snippet;
+  }
 
-  let sidebarCollapsed = false;
-  let mobileMenuOpen = false;
+  let { currentPath = '/', pageTitle = 'Dashboard', children }: Props = $props();
+
+  let sidebarCollapsed = $state(false);
+  let mobileMenuOpen = $state(false);
 
   function toggleMobileMenu() {
     mobileMenuOpen = !mobileMenuOpen;
   }
 
-  $: if (mobileMenuOpen) {
-    document.body.style.overflow = 'hidden';
-  } else {
-    document.body.style.overflow = '';
+  function closeMobileMenu() {
+    mobileMenuOpen = false;
   }
+
+  $effect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  });
 </script>
 
 <div class="layout" class:sidebar-collapsed={sidebarCollapsed}>
@@ -24,14 +36,14 @@
     {currentPath} 
     bind:collapsed={sidebarCollapsed} 
     mobileOpen={mobileMenuOpen}
-    onNavigate={() => mobileMenuOpen = false}
+    onNavigate={closeMobileMenu}
   />
   
   {#if mobileMenuOpen}
     <div 
       class="mobile-overlay" 
-      on:click={toggleMobileMenu}
-      on:keydown={(e) => e.key === 'Escape' && toggleMobileMenu()}
+      onclick={toggleMobileMenu}
+      onkeydown={(e) => e.key === 'Escape' && toggleMobileMenu()}
       role="button"
       tabindex="-1"
       aria-label="Close menu"
@@ -41,7 +53,7 @@
   <div class="main-wrapper">
     <Header title={pageTitle} onMenuClick={toggleMobileMenu} />
     <main class="main-content">
-      <slot />
+      {@render children?.()}
     </main>
   </div>
 </div>

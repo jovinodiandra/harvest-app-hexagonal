@@ -21,10 +21,19 @@
   } from 'lucide-svelte';
   import { authStore } from '../../../entities/auth';
 
-  export let currentPath: string = '/';
-  export let collapsed: boolean = false;
-  export let mobileOpen: boolean = false;
-  export let onNavigate: (() => void) | undefined = undefined;
+  interface Props {
+    currentPath?: string;
+    collapsed?: boolean;
+    mobileOpen?: boolean;
+    onNavigate?: () => void;
+  }
+
+  let { 
+    currentPath = '/', 
+    collapsed = $bindable(false), 
+    mobileOpen = false, 
+    onNavigate 
+  }: Props = $props();
 
   const menuItems = [
     { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
@@ -51,6 +60,12 @@
     collapsed = !collapsed;
   }
 
+  function closeMobileMenu() {
+    if (onNavigate) {
+      onNavigate();
+    }
+  }
+
   function handleNavClick(path: string) {
     window.history.pushState({}, '', path);
     window.dispatchEvent(new PopStateEvent('popstate'));
@@ -70,7 +85,7 @@
     {:else}
       <Fish size={28} />
     {/if}
-    <button class="toggle-btn desktop-only" on:click={toggleSidebar}>
+    <button class="toggle-btn desktop-only" onclick={toggleSidebar}>
       {#if collapsed}
         <ChevronRight size={20} />
       {:else}
@@ -78,7 +93,7 @@
       {/if}
     </button>
     {#if mobileOpen}
-      <button class="close-btn mobile-only" on:click={onNavigate} aria-label="Close menu">
+      <button class="close-btn mobile-only" onclick={closeMobileMenu} aria-label="Close menu">
         <X size={24} />
       </button>
     {/if}
@@ -91,9 +106,9 @@
         class="nav-item"
         class:active={currentPath === item.path}
         title={collapsed ? item.label : ''}
-        on:click|preventDefault={() => handleNavClick(item.path)}
+        onclick={(e: MouseEvent) => { e.preventDefault(); handleNavClick(item.path); }}
       >
-        <svelte:component this={item.icon} size={20} />
+        <item.icon size={20} />
         {#if !collapsed || mobileOpen}
           <span class="nav-label">{item.label}</span>
         {/if}
@@ -102,7 +117,7 @@
   </nav>
 
   <div class="sidebar-footer">
-    <button class="nav-item logout-btn" on:click={handleLogout} title={collapsed ? 'Keluar' : ''}>
+    <button class="nav-item logout-btn" onclick={handleLogout} title={collapsed ? 'Keluar' : ''}>
       <LogOut size={20} />
       {#if !collapsed}
         <span class="nav-label">Keluar</span>
