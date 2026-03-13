@@ -141,4 +141,43 @@
     padding: 0 0.5rem;
     color: var(--color-text-muted);
   }
+
+  @media (max-width: 640px) {
+    .pagination {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.75rem;
+    }
+
+    .pagination-info {
+      text-align: center;
+      font-size: 0.8125rem;
+    }
+
+    .pagination-controls {
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.375rem;
+    }
+
+    .pagination-btn {
+      min-width: 2.25rem;
+      height: 2.25rem;
+      font-size: 0.8125rem;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .pagination-btn:not(.active):not(:first-child):not(:last-child) {
+      display: none;
+    }
+
+    .pagination-btn.active {
+      display: flex;
+    }
+
+    .pagination-ellipsis {
+      display: none;
+    }
+  }
 </style>

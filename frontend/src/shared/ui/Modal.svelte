@@ -129,4 +129,41 @@
     justify-content: flex-end;
     gap: 0.75rem;
   }
+
+  @media (max-width: 640px) {
+    .modal-backdrop {
+      padding: 0.5rem;
+      align-items: flex-end;
+    }
+
+    .modal {
+      max-height: 85vh;
+      border-radius: 1rem 1rem 0 0;
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+
+    .modal-header {
+      padding: 1rem;
+    }
+
+    .modal-title {
+      font-size: 1.125rem;
+    }
+
+    .modal-body {
+      padding: 1rem;
+    }
+
+    .modal-footer {
+      padding: 1rem;
+      flex-direction: column-reverse;
+      gap: 0.5rem;
+    }
+
+    .modal-footer :global(button) {
+      width: 100%;
+      justify-content: center;
+    }
+  }
 </style>

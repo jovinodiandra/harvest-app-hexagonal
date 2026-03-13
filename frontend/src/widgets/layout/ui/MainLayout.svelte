@@ -20,7 +20,12 @@
 </script>
 
 <div class="layout" class:sidebar-collapsed={sidebarCollapsed}>
-  <Sidebar {currentPath} bind:collapsed={sidebarCollapsed} />
+  <Sidebar 
+    {currentPath} 
+    bind:collapsed={sidebarCollapsed} 
+    mobileOpen={mobileMenuOpen}
+    onNavigate={() => mobileMenuOpen = false}
+  />
   
   {#if mobileMenuOpen}
     <div 

@@ -223,6 +223,28 @@
     gap: 1.5rem;
   }
 
+  @media (max-width: 640px) {
+    .dashboard {
+      gap: 1rem;
+    }
+
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+
+    .dashboard-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
   .list {
     display: flex;
     flex-direction: column;

@@ -304,4 +304,47 @@
     flex-direction: column;
     gap: 1rem;
   }
+
+  @media (max-width: 640px) {
+    .page {
+      gap: 1rem;
+    }
+
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+
+    .page-header {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .page-header > div:first-child {
+      text-align: center;
+    }
+
+    .page-title {
+      font-size: 1.25rem;
+    }
+
+    .page-subtitle {
+      font-size: 0.8125rem;
+    }
+
+    .page-header :global(button) {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .pagination-wrapper {
+      padding: 0 0.75rem;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>

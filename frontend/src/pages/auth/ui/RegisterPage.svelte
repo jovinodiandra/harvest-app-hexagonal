@@ -192,4 +192,44 @@
   .register-footer a:hover {
     text-decoration: underline;
   }
+
+  @media (max-width: 480px) {
+    .register-page {
+      padding: 0.5rem;
+      align-items: flex-start;
+      padding-top: 1rem;
+    }
+
+    .register-card {
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+    }
+
+    .register-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 0.75rem;
+    }
+
+    .logo :global(svg) {
+      width: 36px !important;
+      height: 36px !important;
+    }
+
+    .title {
+      font-size: 1.5rem;
+    }
+
+    .subtitle {
+      font-size: 0.875rem;
+    }
+
+    .register-form {
+      gap: 1rem;
+    }
+  }
 </style>

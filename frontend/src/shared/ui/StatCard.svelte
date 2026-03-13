@@ -83,4 +83,45 @@
   .stat-warning .stat-icon { background: #fef3c7; color: #d97706; }
   .stat-danger .stat-icon { background: #fee2e2; color: #dc2626; }
   .stat-info .stat-icon { background: #dbeafe; color: #2563eb; }
+
+  @media (max-width: 640px) {
+    .stat-card {
+      padding: 1rem;
+      flex-direction: column-reverse;
+      gap: 0.75rem;
+    }
+
+    .stat-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 0.5rem;
+    }
+
+    .stat-icon :global(svg) {
+      width: 20px !important;
+      height: 20px !important;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+    }
+
+    .stat-title {
+      font-size: 0.8125rem;
+    }
+
+    .stat-subtitle {
+      font-size: 0.6875rem;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .stat-card {
+      flex-direction: row;
+    }
+
+    .stat-value {
+      font-size: 1.25rem;
+    }
+  }
 </style>

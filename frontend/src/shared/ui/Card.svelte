@@ -81,4 +81,26 @@
     border-top: 1px solid var(--color-border);
     background: var(--color-secondary);
   }
+
+  @media (max-width: 640px) {
+    .card {
+      border-radius: 0.5rem;
+    }
+
+    .card-header {
+      padding: 0.875rem 1rem;
+    }
+
+    .card-title {
+      font-size: 1rem;
+    }
+
+    .card-padding-sm .card-body { padding: 0.5rem; }
+    .card-padding-md .card-body { padding: 1rem; }
+    .card-padding-lg .card-body { padding: 1.25rem; }
+
+    .card-footer {
+      padding: 0.875rem 1rem;
+    }
+  }
 </style>

@@ -172,4 +172,45 @@
   .demo-info strong {
     color: var(--color-text);
   }
+
+  @media (max-width: 480px) {
+    .login-page {
+      padding: 0.5rem;
+      align-items: flex-start;
+      padding-top: 2rem;
+    }
+
+    .login-card {
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+    }
+
+    .logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 0.75rem;
+    }
+
+    .logo :global(svg) {
+      width: 36px !important;
+      height: 36px !important;
+    }
+
+    .title {
+      font-size: 1.5rem;
+    }
+
+    .subtitle {
+      font-size: 0.875rem;
+    }
+
+    .login-form {
+      gap: 1rem;
+    }
+
+    .demo-info {
+      font-size: 0.75rem;
+      padding: 0.75rem;
+    }
+  }
 </style>

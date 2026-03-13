@@ -46,7 +46,8 @@
   }
 </script>
 
-<div class="table-wrapper">
+<!-- Desktop Table View -->
+<div class="table-wrapper desktop-table">
   <table class="table">
     <thead>
       <tr>
@@ -97,6 +98,40 @@
       {/if}
     </tbody>
   </table>
+</div>
+
+<!-- Mobile Card View -->
+<div class="mobile-cards">
+  {#if loading}
+    <div class="mobile-loading">
+      <div class="spinner"></div>
+      <span>Memuat data...</span>
+    </div>
+  {:else if data.length === 0}
+    <div class="mobile-empty">
+      {emptyMessage}
+    </div>
+  {:else}
+    {#each data as item, index}
+      <div class="mobile-card">
+        <div class="mobile-card-content">
+          {#each columns as column}
+            <div class="mobile-card-row">
+              <span class="mobile-card-label">{column.label}</span>
+              <span class="mobile-card-value align-{column.align || 'left'}">
+                {formatValue(item, column.key)}
+              </span>
+            </div>
+          {/each}
+        </div>
+        {#if actions}
+          <div class="mobile-card-actions">
+            {@render actions({ item, index })}
+          </div>
+        {/if}
+      </div>
+    {/each}
+  {/if}
 </div>
 
 <style>
@@ -172,5 +207,95 @@
 
   @keyframes spin {
     to { transform: rotate(360deg); }
+  }
+
+  /* Mobile Card View */
+  .mobile-cards {
+    display: none;
+  }
+
+  .mobile-card {
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+  }
+
+  .mobile-card:last-child {
+    margin-bottom: 0;
+  }
+
+  .mobile-card-content {
+    padding: 1rem;
+  }
+
+  .mobile-card-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-border);
+    gap: 1rem;
+  }
+
+  .mobile-card-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .mobile-card-row:first-child {
+    padding-top: 0;
+  }
+
+  .mobile-card-label {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .mobile-card-value {
+    font-size: 0.875rem;
+    color: var(--color-text);
+    font-weight: 500;
+    text-align: right;
+    word-break: break-word;
+  }
+
+  .mobile-card-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--color-secondary);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .mobile-loading,
+  .mobile-empty {
+    text-align: center;
+    padding: 2rem;
+    color: var(--color-text-muted);
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+  }
+
+  .mobile-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 640px) {
+    .desktop-table {
+      display: none;
+    }
+
+    .mobile-cards {
+      display: block;
+    }
   }
 </style>

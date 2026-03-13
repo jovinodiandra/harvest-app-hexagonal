@@ -54,13 +54,15 @@
   function handleNavClick(path: string) {
     window.history.pushState({}, '', path);
     window.dispatchEvent(new PopStateEvent('popstate'));
-    if (onNavigate) onNavigate();
+    if (window.innerWidth <= 768 && onNavigate) {
+      onNavigate();
+    }
   }
 </script>
 
 <aside class="sidebar" class:collapsed class:mobile-open={mobileOpen}>
   <div class="sidebar-header">
-    {#if !collapsed}
+    {#if !collapsed || mobileOpen}
       <div class="logo">
         <Fish size={32} />
         <span class="logo-text">Ternak Lele</span>
@@ -68,13 +70,18 @@
     {:else}
       <Fish size={28} />
     {/if}
-    <button class="toggle-btn" on:click={toggleSidebar}>
+    <button class="toggle-btn desktop-only" on:click={toggleSidebar}>
       {#if collapsed}
         <ChevronRight size={20} />
       {:else}
         <ChevronLeft size={20} />
       {/if}
     </button>
+    {#if mobileOpen}
+      <button class="close-btn mobile-only" on:click={onNavigate} aria-label="Close menu">
+        <X size={24} />
+      </button>
+    {/if}
   </div>
 
   <nav class="sidebar-nav">
@@ -222,24 +229,55 @@
     color: #dc2626;
   }
 
+  .desktop-only {
+    display: flex;
+  }
+
+  .mobile-only {
+    display: none;
+  }
+
+  .close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+  }
+
+  .close-btn:hover {
+    background: var(--color-secondary);
+    color: var(--color-text);
+  }
+
   /* Responsive Styles */
   @media (max-width: 768px) {
     .sidebar {
       transform: translateX(-100%);
-      width: 280px;
+      width: 300px;
       box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
     }
 
     .sidebar.collapsed {
-      width: 280px;
+      width: 300px;
     }
 
     .sidebar.mobile-open {
       transform: translateX(0);
     }
 
-    .toggle-btn {
+    .desktop-only {
       display: none;
+    }
+
+    .mobile-only {
+      display: flex;
     }
 
     .collapsed .nav-item {
@@ -248,6 +286,16 @@
 
     .collapsed .nav-label {
       display: inline;
+    }
+
+    .nav-item {
+      padding: 1rem;
+      font-size: 1rem;
+    }
+
+    .sidebar-nav {
+      padding: 1rem;
+      gap: 0.5rem;
     }
   }
 
@@ -262,6 +310,10 @@
 
     .sidebar-header {
       min-height: 56px;
+    }
+
+    .logo-text {
+      font-size: 1.125rem;
     }
   }
 </style>
