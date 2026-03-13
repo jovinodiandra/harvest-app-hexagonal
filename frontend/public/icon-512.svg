@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Background rounded square -->
+  <rect width="512" height="512" rx="80" fill="#0ea5e9"/>
+  
+  <!-- Fish body -->
+  <ellipse cx="235" cy="256" rx="140" ry="80" fill="white"/>
+  
+  <!-- Fish tail -->
+  <path d="M375 256 L470 185 L470 327 Z" fill="white"/>
+  
+  <!-- Fish eye -->
+  <circle cx="155" cy="240" r="32" fill="#0ea5e9"/>
+  <circle cx="155" cy="240" r="16" fill="#0c4a6e"/>
+  
+  <!-- Fish whiskers (kumis lele) -->
+  <path d="M95 225 Q48 190 25 150" stroke="white" stroke-width="20" fill="none" stroke-linecap="round"/>
+  <path d="M95 256 Q38 256 15 240" stroke="white" stroke-width="20" fill="none" stroke-linecap="round"/>
+  <path d="M95 287 Q48 322 25 362" stroke="white" stroke-width="20" fill="none" stroke-linecap="round"/>
+  
+  <!-- Fish dorsal fin -->
+  <path d="M235 176 Q268 112 310 176" fill="white"/>
+  
+  <!-- Fish bottom fin -->
+  <path d="M255 336 Q280 375 310 336" fill="white"/>
+</svg>
