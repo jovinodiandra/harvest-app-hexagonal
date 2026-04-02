@@ -139,6 +139,7 @@ public class PostgreGrowthRecordRepository implements GrowthRecordRepository {
         BigDecimal averageWeight = rs.getBigDecimal("average_weight");
         BigDecimal averageLength = rs.getBigDecimal("average_length");
         UUID organizationId = (UUID) rs.getObject("organization_id");
-        return new GrowthRecord(id, pondsId, recordDate, averageWeight, averageLength, organizationId);
+        // GrowthRecord constructor expects (averageLength, averageWeight)
+        return new GrowthRecord(id, pondsId, recordDate, averageLength, averageWeight, organizationId);
     }
 }

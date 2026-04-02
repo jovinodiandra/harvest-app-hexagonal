@@ -32,7 +32,15 @@ public class CreateGrowthRecordUseCase extends AuthenticationUseCase<CreateGrowt
         if (ponds == null){
             throw new ValidationException("Ponds not found");
         }
-        GrowthRecord growthRecord = new GrowthRecord(growthRecordRepository.nextId(), command.pondsId(), command.recordDate(), command.averageWeight(), command.averageLength(), userSession.getOrganizationId());
+        // GrowthRecord constructor expects (averageLength, averageWeight)
+        GrowthRecord growthRecord = new GrowthRecord(
+                growthRecordRepository.nextId(),
+                command.pondsId(),
+                command.recordDate(),
+                command.averageLength(),
+                command.averageWeight(),
+                userSession.getOrganizationId()
+        );
         growthRecordRepository.save(growthRecord);
         return new CreateGrowthRecordResult(growthRecord.id(), growthRecord.pondsId(), ponds.name(), command.recordDate(), command.averageLength(), command.averageWeight());
     }
