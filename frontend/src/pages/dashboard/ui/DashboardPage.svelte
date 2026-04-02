@@ -14,7 +14,7 @@
   import { MainLayout } from '../../../widgets';
   import { StatCard, Card, Badge } from '../../../shared/ui';
   import { api } from '../../../shared/api';
-  import type { HarvestRecord, FinanceRecord } from '../../../shared/types';
+  import type { HarvestRecord, FinanceRecord, FishStatistics } from '../../../shared/types';
   import { formatCurrency, formatShortDate, formatNumber } from '../../../shared/lib/utils';
 
   let stats = {
@@ -68,6 +68,20 @@
       const today = new Date().toISOString().split('T')[0];
       stats.todayFeedCount = feedRes.data.data.filter(f => f.reminderDate === today).length;
       stats.pendingReminders = feedRes.data.data.length;
+    }
+
+    // Total ikan hidup saat ini = total fish alive untuk seluruh kolam
+    const endDate = new Date().toISOString().split('T')[0];
+    const startDateObj = new Date();
+    startDateObj.setFullYear(startDateObj.getFullYear() - 10);
+    const startDate = startDateObj.toISOString().split('T')[0];
+
+    const fishRes = await api.getFishStatistics(startDate, endDate);
+    if (fishRes.success && fishRes.data) {
+      const pondStats = fishRes.data as unknown as FishStatistics[];
+      stats.totalFish = pondStats.reduce((sum: number, pondStat: FishStatistics) => {
+        return sum + (pondStat.totalFishAlive || 0);
+      }, 0);
     }
   }
 
