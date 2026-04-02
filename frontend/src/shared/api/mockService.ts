@@ -501,7 +501,8 @@ export const mockService = {
 
   async getFishStatistics(): Promise<ApiResponse<typeof mockData.mockFishStatistics>> {
     await delay();
-    return { success: true, data: mockData.mockFishStatistics };
+    // Keep the same contract as apiService: always return an array of FishStatistics
+    return { success: true, data: [mockData.mockFishStatistics] as any };
   },
 
   async getGrowthCharts(pondsId: string): Promise<ApiResponse<typeof mockData.mockGrowthCharts>> {

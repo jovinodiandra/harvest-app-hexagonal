@@ -78,10 +78,13 @@
 
     const fishRes = await api.getFishStatistics(startDate, endDate);
     if (fishRes.success && fishRes.data) {
-      const pondStats = fishRes.data as unknown as FishStatistics[];
-      stats.totalFish = pondStats.reduce((sum: number, pondStat: FishStatistics) => {
-        return sum + (pondStat.totalFishAlive || 0);
-      }, 0);
+      const pondStats = fishRes.data as unknown;
+      const totalFromList = Array.isArray(pondStats)
+        ? pondStats.reduce((sum: number, pondStat: FishStatistics) => sum + (pondStat.totalFishAlive || 0), 0)
+        : // Fallback: mock/legacy might return a single aggregated object
+          ((pondStats as any)?.totalFishAlive || 0);
+
+      stats.totalFish = totalFromList;
     }
   }
 

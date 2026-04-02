@@ -1441,7 +1441,10 @@ export const apiService = {
     const response = await apiGet<BackendResponse<any>>(`/reports/fish-statistics?startDate=${startDate}&endDate=${endDate}`);
     
     if (response.success && response.data?.data) {
-      return { success: true, data: response.data.data };
+      const payload = response.data.data;
+      // Backend returns: { fishStatistics: [...] }
+      const fishStatistics = Array.isArray(payload?.fishStatistics) ? payload.fishStatistics : [];
+      return { success: true, data: fishStatistics };
     }
     
     return { success: false, error: response.error || response.data?.message || 'Terjadi kesalahan' };
