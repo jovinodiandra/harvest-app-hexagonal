@@ -9,6 +9,7 @@ public interface UserRepository {
     UUID nextId();
 
     boolean existsByEmail(String email);
+
     List<User> findAllByOrganizationId(UUID organizationId,int offset, int limit);
 
     User findByEmail(String email);
