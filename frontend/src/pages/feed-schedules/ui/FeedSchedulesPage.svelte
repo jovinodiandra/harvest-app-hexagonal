@@ -25,10 +25,10 @@
   };
 
   const feedTypes = [
-    { value: 'PF-500', label: 'PF-500 (Starter)' },
-    { value: 'PF-1000', label: 'PF-1000 (Grower)' },
-    { value: 'HI-PRO', label: 'HI-PRO (Finisher)' },
-    { value: 'Pelet Apung', label: 'Pelet Apung' },
+    { value: 'PF-500', label: 'PF-500' },
+    { value: 'PF-1000', label: 'PF-1000' },
+    { value: 'HI-PRO-VITE 781', label: 'HI-PRO-VITE 781 ' },
+    { value: 'HI-PRO-VITE 781-1', label: 'HI-PRO-VITE 781-1' },
     { value: 'Pelet Tenggelam', label: 'Pelet Tenggelam' },
   ];
 
