@@ -3,6 +3,7 @@ package org.harvest.postgre.repository;
 import org.harvest.application.port.outbound.GrowthRecordRepository;
 import org.harvest.domain.GrowthRecord;
 import org.harvest.postgre.config.DatabaseConfig;
+import org.harvest.shared.query.Pagination;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
@@ -94,13 +95,12 @@ public class PostgreGrowthRecordRepository implements GrowthRecordRepository {
     }
 
     @Override
-    public List<GrowthRecord> findAllByOrganizationId(UUID organizationId, int offset, int limit) {
+    public List<GrowthRecord> findAllByOrganizationId(UUID organizationId, Pagination pagination) {
         List<GrowthRecord> list = new ArrayList<>();
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_ALL_BY_ORGANIZATION)) {
             ps.setObject(1, organizationId);
-            ps.setInt(2, limit);
-            ps.setInt(3, offset);
+            ps.setObject(2, pagination);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     list.add(mapRow(rs));
@@ -113,14 +113,13 @@ public class PostgreGrowthRecordRepository implements GrowthRecordRepository {
     }
 
     @Override
-    public List<GrowthRecord> findAllByPondsIdAndOrganizationId(UUID pondsId, UUID organizationId, int offset, int limit) {
+    public List<GrowthRecord> findAllByPondsIdAndOrganizationId(UUID pondsId, UUID organizationId, Pagination pagination) {
         List<GrowthRecord> list = new ArrayList<>();
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_BY_PONDS_AND_ORGANIZATION)) {
             ps.setObject(1, pondsId);
             ps.setObject(2, organizationId);
-            ps.setInt(3, limit);
-            ps.setInt(4, offset);
+            ps.setObject(3, pagination);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     list.add(mapRow(rs));

@@ -3,6 +3,7 @@ package org.harvest.postgre.repository;
 import org.harvest.application.port.outbound.WatterQualityRepository;
 import org.harvest.domain.WatterQuality;
 import org.harvest.postgre.config.DatabaseConfig;
+import org.harvest.shared.query.Pagination;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
@@ -95,13 +96,13 @@ public class PostgreWatterQualityRepository implements WatterQualityRepository {
     }
 
     @Override
-    public List<WatterQuality> findAllByPondsId(UUID pondsId, int offset, int limit) {
+    public List<WatterQuality> findAllByPondsId(UUID pondsId, Pagination pagination) {
         List<WatterQuality> list = new ArrayList<>();
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_BY_PONDS)) {
             ps.setObject(1, pondsId);
-            ps.setInt(2, limit);
-            ps.setInt(3, offset);
+            ps.setObject(2, pagination);
+
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     list.add(mapRow(rs));

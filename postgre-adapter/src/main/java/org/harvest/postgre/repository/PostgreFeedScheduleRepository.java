@@ -3,6 +3,7 @@ package org.harvest.postgre.repository;
 import org.harvest.application.port.outbound.FeedScheduleRepository;
 import org.harvest.domain.FeedSchedule;
 import org.harvest.postgre.config.DatabaseConfig;
+import org.harvest.shared.query.Pagination;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
@@ -94,13 +95,12 @@ public class PostgreFeedScheduleRepository implements FeedScheduleRepository {
     }
 
     @Override
-    public List<FeedSchedule> findByOrganizationId(UUID organizationId, int offset, int limit) {
+    public List<FeedSchedule> findByOrganizationId(UUID organizationId, Pagination pagination) {
         List<FeedSchedule> list = new ArrayList<>();
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_BY_ORGANIZATION)) {
             ps.setObject(1, organizationId);
-            ps.setInt(2, limit);
-            ps.setInt(3, offset);
+            ps.setObject(2,pagination);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     list.add(mapRow(rs));

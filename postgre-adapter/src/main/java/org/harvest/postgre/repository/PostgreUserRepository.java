@@ -4,6 +4,7 @@ import org.harvest.application.dto.value.Role;
 import org.harvest.application.port.outbound.UserRepository;
 import org.harvest.domain.User;
 import org.harvest.postgre.config.DatabaseConfig;
+import org.harvest.shared.query.Pagination;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -54,13 +55,13 @@ public class PostgreUserRepository implements UserRepository {
     }
 
     @Override
-    public List<User> findAllByOrganizationId(UUID organizationId, int offset, int limit) {
+    public List<User> findAllByOrganizationId(UUID organizationId, Pagination pagination) {
         List<User> list = new ArrayList<>();
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_ALL_BY_ORGANIZATION)) {
             ps.setObject(1, organizationId);
-            ps.setInt(2, limit);
-            ps.setInt(3, offset);
+            ps.setObject(2, pagination);
+
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     list.add(mapRow(rs));

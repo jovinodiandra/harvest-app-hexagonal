@@ -3,6 +3,7 @@ package org.harvest.postgre.repository;
 import org.harvest.application.port.outbound.DiseasesRecordRepository;
 import org.harvest.domain.DiseasesRecord;
 import org.harvest.postgre.config.DatabaseConfig;
+import org.harvest.shared.query.Pagination;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -97,13 +98,12 @@ public class PostgreDiseasesRecordRepository implements DiseasesRecordRepository
     }
 
     @Override
-    public List<DiseasesRecord> findAllByPondsId(UUID pondsId, int offset, int limit) {
+    public List<DiseasesRecord> findAllByPondsId(UUID pondsId, Pagination pagination) {
         List<DiseasesRecord> list = new ArrayList<>();
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_BY_PONDS)) {
             ps.setObject(1, pondsId);
-            ps.setInt(2, limit);
-            ps.setInt(3, offset);
+            ps.setObject(2,pagination);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     list.add(mapRow(rs));

@@ -3,6 +3,7 @@ package org.harvest.postgre.repository;
 import org.harvest.application.port.outbound.PondsRepository;
 import org.harvest.domain.Ponds;
 import org.harvest.postgre.config.DatabaseConfig;
+import org.harvest.shared.query.Pagination;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -65,13 +66,12 @@ public class PostgrePondsRepository implements PondsRepository {
     }
 
     @Override
-    public List<Ponds> findAllByOrganizationId(UUID organizationId, int offset, int limit) {
+    public List<Ponds> findAllByOrganizationId(UUID organizationId, Pagination pagination) {
         List<Ponds> list = new ArrayList<>();
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_ALL_BY_ORGANIZATION)) {
             ps.setObject(1, organizationId);
-            ps.setInt(2, limit);
-            ps.setInt(3, offset);
+           ps.setObject(2, pagination);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     list.add(mapRow(rs));

@@ -3,6 +3,7 @@ package org.harvest.postgre.repository;
 import org.harvest.application.port.outbound.SupplierRepository;
 import org.harvest.domain.Supplier;
 import org.harvest.postgre.config.DatabaseConfig;
+import org.harvest.shared.query.Pagination;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -95,13 +96,13 @@ public class PostgreSupplierRepository implements SupplierRepository {
     }
 
     @Override
-    public List<Supplier> findAllByOrganization(UUID organizationId, int offset, int limit) {
+    public List<Supplier> findAllByOrganization(UUID organizationId, Pagination pagination) {
         List<Supplier> list = new ArrayList<>();
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_ALL_BY_ORGANIZATION)) {
             ps.setObject(1, organizationId);
-            ps.setInt(2, limit);
-            ps.setInt(3, offset);
+            ps.setObject(2, pagination);
+
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     list.add(mapRow(rs));
@@ -114,7 +115,7 @@ public class PostgreSupplierRepository implements SupplierRepository {
     }
 
     @Override
-    public List<Supplier> findByName(UUID organizationId, String name, int offset, int limit) {
+    public List<Supplier> findByName(UUID organizationId, String name, Pagination pagination) {
         List<Supplier> list = new ArrayList<>();
         String searchPattern = name != null && !name.isBlank() ? "%" + name + "%" : null;
         try (Connection conn = dataSource.getConnection();
@@ -122,8 +123,8 @@ public class PostgreSupplierRepository implements SupplierRepository {
             ps.setObject(1, organizationId);
             ps.setString(2, searchPattern);
             ps.setString(3, searchPattern);
-            ps.setInt(4, limit);
-            ps.setInt(5, offset);
+            ps.setObject(4, pagination);
+
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     list.add(mapRow(rs));

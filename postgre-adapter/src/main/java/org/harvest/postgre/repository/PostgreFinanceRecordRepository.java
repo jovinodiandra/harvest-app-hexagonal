@@ -4,6 +4,7 @@ import org.harvest.application.dto.value.TransactionType;
 import org.harvest.application.port.outbound.FinanceRecordRepository;
 import org.harvest.domain.FinanceRecord;
 import org.harvest.postgre.config.DatabaseConfig;
+import org.harvest.shared.query.Pagination;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
@@ -105,7 +106,7 @@ public class PostgreFinanceRecordRepository implements FinanceRecordRepository {
     }
 
     @Override
-    public List<FinanceRecord> findByFilters(UUID organizationId, TransactionType transactionType, LocalDate startDate, LocalDate endDate, int offset, int limit) {
+    public List<FinanceRecord> findByFilters(UUID organizationId, TransactionType transactionType, LocalDate startDate, LocalDate endDate, Pagination pagination) {
         List<FinanceRecord> list = new ArrayList<>();
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_BY_FILTERS)) {
@@ -116,8 +117,7 @@ public class PostgreFinanceRecordRepository implements FinanceRecordRepository {
             ps.setObject(5, startDate);
             ps.setObject(6, endDate);
             ps.setObject(7, endDate);
-            ps.setInt(8, limit);
-            ps.setInt(9, offset);
+          ps.setObject(8, pagination);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     list.add(mapRow(rs));
