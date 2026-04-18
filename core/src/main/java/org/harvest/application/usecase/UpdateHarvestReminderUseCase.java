@@ -7,6 +7,7 @@ import org.harvest.application.port.inbound.AuthenticationUseCase;
 import org.harvest.application.port.outbound.HarvestReminderRepository;
 import org.harvest.application.port.outbound.PondsRepository;
 import org.harvest.application.port.outbound.security.UserSession;
+import org.harvest.application.port.service.ReminderSchedulerService;
 import org.harvest.domain.HarvestRecord;
 import org.harvest.domain.HarvestReminder;
 import org.harvest.domain.Ponds;
@@ -19,10 +20,11 @@ import java.time.LocalTime;
 public class UpdateHarvestReminderUseCase extends AuthenticationUseCase<UpdateHarvestReminderCommand, UpdateHarvestReminderResult> {
     private final HarvestReminderRepository harvestReminderRepository;
     private final PondsRepository pondsRepository;
-
-    public UpdateHarvestReminderUseCase(HarvestReminderRepository harvestReminderRepository, PondsRepository pondsRepository) {
+    private final ReminderSchedulerService reminderSchedulerService;
+    public UpdateHarvestReminderUseCase(HarvestReminderRepository harvestReminderRepository, PondsRepository pondsRepository, ReminderSchedulerService reminderSchedulerService) {
         this.harvestReminderRepository = harvestReminderRepository;
         this.pondsRepository = pondsRepository;
+        this.reminderSchedulerService = reminderSchedulerService;
     }
 
     @Override
@@ -42,6 +44,7 @@ public class UpdateHarvestReminderUseCase extends AuthenticationUseCase<UpdateHa
         }
         HarvestReminder harvestReminderUpdate = harvestReminder.update(command.reminderDate(), command.reminderTime(), command.notes());
         harvestReminderRepository.update(harvestReminderUpdate);
+        reminderSchedulerService.updateHarvestReminder(harvestReminderUpdate, ponds);
         return new UpdateHarvestReminderResult(harvestReminderUpdate.id(), harvestReminderUpdate.pondId(),harvestReminderUpdate.reminderDate(),harvestReminderUpdate.reminderTime(),harvestReminderUpdate.notes(), LocalDateTime.now());
     }
 

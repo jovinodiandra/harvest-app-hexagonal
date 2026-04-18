@@ -5,7 +5,13 @@ import org.harvest.JwtConfiguration;
 import org.harvest.JwtSessionManager;
 import org.harvest.application.port.outbound.*;
 import org.harvest.application.port.outbound.security.SessionManager;
+import org.harvest.application.port.service.ReminderSchedulerService;
+import org.harvest.logging.adapter.Slf4jLogAdapter;
+import org.harvest.notification.adapter.ConsoleNotificationAdapter;
+import org.harvest.notification.adapter.SmtpConfig;
+import org.harvest.notification.adapter.SmtpNotificationAdapter;
 import org.harvest.postgre.repository.PostgreContactRepository;
+import org.harvest.reminder.adapter.SimpleThreadReminderSchedulerAdapter;
 import org.harvest.postgre.repository.PostgreDeathRecordRepository;
 import org.harvest.postgre.repository.PostgreFeedReminderRepository;
 import org.harvest.postgre.repository.PostgreFeedScheduleRepository;
@@ -130,5 +136,42 @@ public class DependencyConfiguration {
     @Bean
     public FeedReminderRepository feedReminderRepository() {
         return new PostgreFeedReminderRepository();
+    }
+
+    @Bean
+    public LogManager logManager() {
+        return new Slf4jLogAdapter();
+    }
+
+    @Bean
+    public SmtpConfig smtpConfig() {
+        // For production, use environment variables or external config
+        return SmtpConfig.create(
+                "smtp-relay.brevo.com",
+                587,
+                "a883d3001@smtp-brevo.com",
+                "xsmtpsib-55f8f57c1b3d714b7b430f368f231b155d8085dd31240fd894161f29540af00d-v1mMbKNsqRNxZCKB",
+                "a883d3001@smtp-brevo.com",
+                "Harvest App"
+        );
+    }
+
+    @Bean
+    public NotificationSender notificationSender(
+            LogManager logManager
+    ) {
+        // Use SmtpNotificationAdapter for production
+        return new ConsoleNotificationAdapter( logManager);
+
+        // Use ConsoleNotificationAdapter for development/testing
+        // return new ConsoleNotificationAdapter(logManager);
+    }
+
+    @Bean
+    public ReminderSchedulerService reminderSchedulerService(
+            NotificationSender notificationSender,
+            LogManager logManager
+    ) {
+        return new SimpleThreadReminderSchedulerAdapter(notificationSender, logManager);
     }
 }

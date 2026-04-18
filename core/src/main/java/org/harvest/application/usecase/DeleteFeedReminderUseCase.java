@@ -5,15 +5,17 @@ import org.harvest.application.dto.result.DefaultResult;
 import org.harvest.application.port.inbound.AuthenticationUseCase;
 import org.harvest.application.port.outbound.FeedReminderRepository;
 import org.harvest.application.port.outbound.security.UserSession;
+import org.harvest.application.port.service.ReminderSchedulerService;
 import org.harvest.domain.FeedReminder;
 import org.harvest.shared.exception.ValidationException;
 
 public class DeleteFeedReminderUseCase extends AuthenticationUseCase<DeleteFeedReminderCommand, DefaultResult> {
     private final FeedReminderRepository feedReminderRepository;
+    private final ReminderSchedulerService reminderSchedulerService;
 
-    public DeleteFeedReminderUseCase(FeedReminderRepository feedReminderRepository) {
+    public DeleteFeedReminderUseCase(FeedReminderRepository feedReminderRepository, ReminderSchedulerService reminderSchedulerService) {
         this.feedReminderRepository = feedReminderRepository;
-
+        this.reminderSchedulerService = reminderSchedulerService;
     }
 
     @Override
@@ -28,6 +30,7 @@ public class DeleteFeedReminderUseCase extends AuthenticationUseCase<DeleteFeedR
             throw new ValidationException("Feed Reminder not found");
         }
         feedReminderRepository.delete(feedReminder);
+        reminderSchedulerService.cancelFeedReminder(command.feedReminderId());
         return new DefaultResult();
     }
 

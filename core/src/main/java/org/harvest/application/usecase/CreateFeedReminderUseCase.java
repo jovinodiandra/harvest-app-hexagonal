@@ -6,6 +6,7 @@ import org.harvest.application.port.inbound.AuthenticationUseCase;
 import org.harvest.application.port.outbound.FeedReminderRepository;
 import org.harvest.application.port.outbound.PondsRepository;
 import org.harvest.application.port.outbound.security.UserSession;
+import org.harvest.application.port.service.ReminderSchedulerService;
 import org.harvest.domain.FeedReminder;
 import org.harvest.domain.Ponds;
 import org.harvest.shared.exception.NotFoundException;
@@ -17,11 +18,15 @@ public class CreateFeedReminderUseCase extends AuthenticationUseCase<CreateFeedR
 
     private final FeedReminderRepository feedReminderRepository;
     private final PondsRepository pondsRepository;
+    private final ReminderSchedulerService reminderSchedulerService;
 
-    public CreateFeedReminderUseCase(FeedReminderRepository feedReminderRepository, PondsRepository pondsRepository) {
+    public CreateFeedReminderUseCase(FeedReminderRepository feedReminderRepository, PondsRepository pondsRepository, ReminderSchedulerService reminderSchedulerService) {
         this.feedReminderRepository = feedReminderRepository;
         this.pondsRepository = pondsRepository;
+        this.reminderSchedulerService = reminderSchedulerService;
     }
+
+
 
     @Override
     protected UserSession authenticate(CreateFeedReminderCommand command) {
@@ -46,7 +51,7 @@ public class CreateFeedReminderUseCase extends AuthenticationUseCase<CreateFeedR
         );
 
         feedReminderRepository.save(feedReminder);
-
+        reminderSchedulerService.scheduleFeedReminder(feedReminder, pond);
         return new CreateFeedReminderResult(
                 feedReminder.id(),
                 feedReminder.pondsId(),
