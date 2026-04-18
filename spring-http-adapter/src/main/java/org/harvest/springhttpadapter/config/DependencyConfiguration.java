@@ -151,8 +151,8 @@ public class DependencyConfiguration {
                 587,
                 null,
                 null,
-                "a883d3001@smtp-brevo.com",
-                "Harvest App"
+                null,
+                null
         );
     }
 
