@@ -5,10 +5,16 @@
     <file url="file://$PROJECT_DIR$/core/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/jwt-adapter/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/jwt-adapter/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/logging-adapter/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/logging-adapter/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/notification-adapter/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/notification-adapter/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/password-security-adapter/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/password-security-adapter/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/postgre-adapter/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/postgre-adapter/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/reminder-adapter/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/reminder-adapter/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-http-adapter/src/main/java" charset="UTF-8" />
   </component>
 </project>

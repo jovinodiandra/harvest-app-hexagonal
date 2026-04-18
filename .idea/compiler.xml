@@ -9,6 +9,9 @@
         <module name="jwt-adapter" />
         <module name="core" />
         <module name="postgre-adapter" />
+        <module name="logging-adapter" />
+        <module name="reminder-adapter" />
+        <module name="notification-adapter" />
         <module name="password-security-adapter" />
       </profile>
       <profile name="Annotation profile for spring-http-adapter" enabled="true">

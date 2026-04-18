@@ -147,23 +147,21 @@ public class DependencyConfiguration {
     public SmtpConfig smtpConfig() {
         // For production, use environment variables or external config
         return SmtpConfig.create(
-                "smtp.example.com",
+                "smtp-relay.brevo.com",
                 587,
-                "your-username",
-                "your-password",
-                "noreply@harvest.app",
+                "a883d3001@smtp-brevo.com",
+                "xsmtpsib-55f8f57c1b3d714b7b430f368f231b155d8085dd31240fd894161f29540af00d-v1mMbKNsqRNxZCKB",
+                "a883d3001@smtp-brevo.com",
                 "Harvest App"
         );
     }
 
     @Bean
     public NotificationSender notificationSender(
-            SmtpConfig smtpConfig,
-            UserRepository userRepository,
             LogManager logManager
     ) {
         // Use SmtpNotificationAdapter for production
-        return new SmtpNotificationAdapter(smtpConfig, userRepository, logManager);
+        return new ConsoleNotificationAdapter( logManager);
 
         // Use ConsoleNotificationAdapter for development/testing
         // return new ConsoleNotificationAdapter(logManager);
