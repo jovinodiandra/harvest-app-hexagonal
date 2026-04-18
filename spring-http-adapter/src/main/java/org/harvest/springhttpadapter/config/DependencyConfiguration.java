@@ -147,10 +147,10 @@ public class DependencyConfiguration {
     public SmtpConfig smtpConfig() {
         // For production, use environment variables or external config
         return SmtpConfig.create(
-                "smtp-relay.brevo.com",
+                null,
                 587,
-                "a883d3001@smtp-brevo.com",
-                "xsmtpsib-55f8f57c1b3d714b7b430f368f231b155d8085dd31240fd894161f29540af00d-v1mMbKNsqRNxZCKB",
+                null,
+                null,
                 "a883d3001@smtp-brevo.com",
                 "Harvest App"
         );
