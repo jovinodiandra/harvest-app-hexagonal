@@ -2,17 +2,17 @@ package org.harvest.application.dto.value;
 
 import org.harvest.shared.exception.ValidationException;
 
-public enum StatusPrice {
+public enum FeedPriceStatus {
     ACTIVE, NONACTIVE;
 
     public String getDisplayName(){
         return this == ACTIVE ? "active" : "non active";
     }
 
-     public static StatusPrice fromString(String value){
-        for (StatusPrice statusPrice : StatusPrice.values()){
-            if (statusPrice.name().equalsIgnoreCase(value)){
-                return statusPrice;
+     public static FeedPriceStatus fromString(String value){
+        for (FeedPriceStatus status : FeedPriceStatus.values()){
+            if (status.name().equalsIgnoreCase(value)){
+                return status;
             }
         }
         throw new ValidationException("unknown status" + value);
