@@ -7,6 +7,7 @@ import org.harvest.application.port.outbound.FinanceRecordRepository;
 import org.harvest.application.port.outbound.security.UserSession;
 import org.harvest.domain.FinanceRecord;
 import org.harvest.shared.exception.ValidationException;
+import org.harvest.shared.query.Pagination;
 
 import java.util.List;
 
@@ -24,8 +25,8 @@ public class ViewFinanceRecordsUseCase extends AuthenticationUseCase<ViewFinance
 
     @Override
     protected ViewFinanceRecordResult executeBusiness(ViewFinanceRecordQuery query, UserSession userSession) {
-        int offset = (query.page() - 1) * query.limit();
-        List<FinanceRecord> records = financeRecordRepository.findByFilters(userSession.getOrganizationId(), query.transactionType(), query.startDate(), query.endDate(), offset, query.limit());
+        Pagination pagination = new Pagination(query.page(), query.limit());
+        List<FinanceRecord> records = financeRecordRepository.findByFilters(userSession.getOrganizationId(), query.transactionType(), query.startDate(), query.endDate(), pagination);
         return new ViewFinanceRecordResult(records);
     }
 
@@ -34,11 +35,6 @@ public class ViewFinanceRecordsUseCase extends AuthenticationUseCase<ViewFinance
         if (query.startDate() != null && query.endDate() != null && query.startDate().isAfter(query.endDate())) {
             throw new ValidationException("Start date cannot be after end date");
         }
-        if (query.limit() <= 0 ) {
-            throw new ValidationException("Limit must be greater than 0");
-        }
-        if (query.page() <=0) {
-            throw new ValidationException("Offset must be greater than 0");
-        }
+
     }
 }

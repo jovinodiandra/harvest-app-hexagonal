@@ -1,6 +1,7 @@
 package org.harvest.application.port.outbound;
 
 import org.harvest.domain.Supplier;
+import org.harvest.shared.query.Pagination;
 
 import java.util.List;
 import java.util.UUID;
@@ -11,7 +12,7 @@ public interface SupplierRepository {
     void delete(Supplier supplier);
     void update(Supplier supplier);
     Supplier findById(UUID id);
-    List<Supplier> findAllByOrganization(UUID organizationId, int offset, int limit);
-    List<Supplier> findByName(UUID organizationId, String name, int offset, int limit);
+    List<Supplier> findAllByOrganization(UUID organizationId, Pagination pagination);
+    List<Supplier> findByName(UUID organizationId, String name, Pagination pagination);
 
 }

@@ -1,9 +1,8 @@
-package org.harvest.shared.exception;
+package org.harvest.shared.query;
 
 import org.harvest.shared.exception.ValidationException;
 
 public class Pagination {
-
 
     private final int page;
     private final int limit;

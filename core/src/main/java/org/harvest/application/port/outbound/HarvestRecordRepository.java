@@ -1,6 +1,7 @@
 package org.harvest.application.port.outbound;
 
 import org.harvest.domain.HarvestRecord;
+import org.harvest.shared.query.Pagination;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,8 +13,8 @@ public interface HarvestRecordRepository {
     HarvestRecord findById(UUID id);
     void delete(HarvestRecord harvestRecord);
     void update(HarvestRecord harvestRecord);
-    List<HarvestRecord> findAllByPondsId(UUID pondsId, int offset, int limit);
-    List<HarvestRecord> findAllByOrganizationId(UUID organizationId, int offset, int limit);
+    List<HarvestRecord> findAllByPondsId(UUID pondsId, Pagination pagination);
+    List<HarvestRecord> findAllByOrganizationId(UUID organizationId, Pagination pagination);
 
     /**
      * Laporan panen berdasarkan filter kolam dan periode (US-54).

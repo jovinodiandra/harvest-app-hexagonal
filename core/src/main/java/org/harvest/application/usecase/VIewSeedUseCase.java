@@ -7,6 +7,7 @@ import org.harvest.application.port.outbound.SeedRepository;
 import org.harvest.application.port.outbound.security.UserSession;
 import org.harvest.domain.Seed;
 import org.harvest.shared.exception.ValidationException;
+import org.harvest.shared.query.Pagination;
 
 import java.util.List;
 
@@ -25,19 +26,14 @@ public class VIewSeedUseCase extends AuthenticationUseCase<ViewSeedQuery, ViewSe
 
     @Override
     protected ViewSeedResult executeBusiness(ViewSeedQuery command, UserSession userSession) {
-        int offset = (command.page() -1)* command.limit();
-        List<Seed> seed = seedRepository.findAllByOrganization(userSession.getOrganizationId(),offset, command.limit());
+        Pagination pagination = new Pagination(command.page(), command.limit());
+        List<Seed> seed = seedRepository.findAllByOrganization(userSession.getOrganizationId(),pagination);
         return new ViewSeedResult(seed);
     }
 
     @Override
     protected void validateCommand(ViewSeedQuery command) {
-        if (command.page() < 1){
-            throw new ValidationException("Page must be greater than 0");
-        }
-        if (command.limit() < 1){
-            throw new ValidationException("Limit must be greater than 0");
-        }
+
 
     }
 }

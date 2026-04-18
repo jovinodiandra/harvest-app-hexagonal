@@ -9,6 +9,7 @@ import org.harvest.application.port.outbound.security.UserSession;
 import org.harvest.domain.DiseasesRecord;
 import org.harvest.domain.Ponds;
 import org.harvest.shared.exception.ValidationException;
+import org.harvest.shared.query.Pagination;
 
 import java.util.List;
 
@@ -32,18 +33,13 @@ public class ViewDiseasesRecordUseCase extends AuthenticationUseCase<VIewDisease
         if (ponds == null) {
             throw new ValidationException("Ponds not found");
         }
-        int offset = (command.page() - 1) * command.limit();
-        List<DiseasesRecord> diseasesRecordList = diseasesRecordRepository.findAllByPondsId(command.pondId(), offset, command.limit());
+        Pagination pagination = new Pagination(command.page(),command.limit());
+        List<DiseasesRecord> diseasesRecordList = diseasesRecordRepository.findAllByPondsId(command.pondId(), pagination);
         return new ViewDiseasesRecordResult(diseasesRecordList);
     }
 
     @Override
     protected void validateCommand(VIewDiseasesRecordQuery command) {
-        if (command.page() < 1) {
-            throw new ValidationException("Page must be greater than 0");
-        }
-        if (command.limit() < 1) {
-            throw new ValidationException("Limit must be greater than 0");
-        }
+
     }
 }

@@ -31,6 +31,10 @@ public class CreateUserUseCase extends AuthenticationUseCase<CreateUserCommand, 
         if (userRepository.existsByEmail(command.email())){
             throw new ValidationException("Email already exists");
         }
+
+        if (userSession.getRole() != Role.OWNER || userSession.getRole() != Role.ADMIN){
+            throw new ValidationException("role must be owner or admin");
+        }
         User user = new User(userRepository.nextId(), command.name(), command.email(), passwordSecurity.hash(command.password()), userSession.getOrganizationId(), Role.USER);
         userRepository.save(user);
 

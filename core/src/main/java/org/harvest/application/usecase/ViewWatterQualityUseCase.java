@@ -9,6 +9,7 @@ import org.harvest.application.port.outbound.security.UserSession;
 import org.harvest.domain.Ponds;
 import org.harvest.domain.WatterQuality;
 import org.harvest.shared.exception.ValidationException;
+import org.harvest.shared.query.Pagination;
 
 import java.util.List;
 
@@ -33,18 +34,13 @@ public class ViewWatterQualityUseCase extends AuthenticationUseCase<ViewWatterQu
         if (ponds == null) {
             throw new ValidationException("Ponds not found");
         }
-        int offset = (command.page() - 1) * command.limit();
-        List<WatterQuality> watterQualityList = watterQualityRepository.findAllByPondsId(command.pondsId(), offset, command.limit());
+        Pagination pagination = new Pagination(command.page(), command.limit());
+        List<WatterQuality> watterQualityList = watterQualityRepository.findAllByPondsId(command.pondsId(), pagination);
         return new ViewWatterQualityResult(watterQualityList);
     }
 
     @Override
     protected void validateCommand(ViewWatterQualityQuery command) {
-        if (command.page() < 1) {
-            throw new ValidationException("Page must be greater than 0");
-        }
-        if (command.limit() < 1) {
-            throw new ValidationException("Limit must be greater than 0");
-        }
+
     }
 }

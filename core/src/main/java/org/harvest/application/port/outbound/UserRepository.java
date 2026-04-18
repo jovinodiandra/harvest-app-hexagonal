@@ -1,6 +1,7 @@
 package org.harvest.application.port.outbound;
 
 import org.harvest.domain.User;
+import org.harvest.shared.query.Pagination;
 
 import java.util.List;
 import java.util.UUID;
@@ -10,7 +11,7 @@ public interface UserRepository {
 
     boolean existsByEmail(String email);
 
-    List<User> findAllByOrganizationId(UUID organizationId,int offset, int limit);
+    List<User> findAllByOrganizationId(UUID organizationId, Pagination pagination);
 
     User findByEmail(String email);
 

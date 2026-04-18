@@ -8,6 +8,7 @@ import org.harvest.application.port.outbound.PondsRepository;
 import org.harvest.application.port.outbound.security.UserSession;
 import org.harvest.domain.Ponds;
 import org.harvest.shared.exception.ValidationException;
+import org.harvest.shared.query.Pagination;
 
 import java.util.List;
 
@@ -25,19 +26,13 @@ public class ViewPondsUseCase extends AuthenticationUseCase<ViewPondsQuery, View
 
     @Override
     protected ViewPondsResult executeBusiness(ViewPondsQuery command, UserSession userSession) {
-        int offset = (command.page()-1 )* command.limit();
-        List<Ponds> ponds = pondsRepository.findAllByOrganizationId(userSession.getOrganizationId(),offset,command.limit());
+        Pagination pagination = new Pagination(command.page(),command.limit());
+        List<Ponds> ponds = pondsRepository.findAllByOrganizationId(userSession.getOrganizationId(),pagination);
         return new ViewPondsResult(ponds);
     }
 
     @Override
     protected void validateCommand(ViewPondsQuery command) {
-        if (command.page() < 1){
-            throw new ValidationException("Page must be greater than 0");
-        }
 
-        if (command.limit() < 1){
-            throw new ValidationException("Limit must be greater than 0");
-        }
     }
 }

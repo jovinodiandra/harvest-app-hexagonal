@@ -6,7 +6,7 @@ import org.harvest.application.port.inbound.AuthenticationUseCase;
 import org.harvest.application.port.outbound.UserRepository;
 import org.harvest.application.port.outbound.security.UserSession;
 import org.harvest.domain.User;
-import org.harvest.shared.exception.ValidationException;
+import org.harvest.shared.query.Pagination;
 
 import java.util.List;
 
@@ -24,19 +24,13 @@ public class ViewUserUseCase extends AuthenticationUseCase<ViewUserQuery, ViewUs
 
     @Override
     protected ViewUserResult executeBusiness(ViewUserQuery command, UserSession userSession) {
-        int offset = (command.page() -1 ) * command.limit();
-        List<User> user = userRepository.findAllByOrganizationId(userSession.getOrganizationId(),offset,command.limit());
+        Pagination pagination = new Pagination(command.page(), command.limit());
+        List<User> user = userRepository.findAllByOrganizationId(userSession.getOrganizationId(), pagination);
         return new ViewUserResult(user);
     }
 
     @Override
     protected void validateCommand(ViewUserQuery command) {
-if (command.page() < 1){
-    throw new ValidationException("Page must be greater than 0");
-}
 
-if(command.limit()<1){
-    throw new ValidationException("Limit must be greater than 0");
-}
     }
 }

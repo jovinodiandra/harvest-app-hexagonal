@@ -2,6 +2,7 @@ package org.harvest.application.port.outbound;
 
 import org.harvest.application.dto.value.TransactionType;
 import org.harvest.domain.FinanceRecord;
+import org.harvest.shared.query.Pagination;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -13,6 +14,6 @@ public interface FinanceRecordRepository {
     void delete(FinanceRecord financeRecord);
     void update(FinanceRecord financeRecord);
     FinanceRecord findById(UUID id);
-    List<FinanceRecord> findByFilters(UUID organizationId, TransactionType transactionType, LocalDate startDate, LocalDate endDate, int offset, int limit);
+    List<FinanceRecord> findByFilters(UUID organizationId, TransactionType transactionType, LocalDate startDate, LocalDate endDate, Pagination pagination);
     List<FinanceRecord> findAllByOrganizationId(UUID organizationId, LocalDate startDate, LocalDate endDate);
 }

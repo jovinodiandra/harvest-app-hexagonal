@@ -7,6 +7,7 @@ import org.harvest.application.port.outbound.FeedScheduleRepository;
 import org.harvest.application.port.outbound.security.UserSession;
 import org.harvest.domain.FeedSchedule;
 import org.harvest.shared.exception.ValidationException;
+import org.harvest.shared.query.Pagination;
 
 import java.util.List;
 
@@ -24,19 +25,13 @@ public class ViewFeedScheduleUseCase extends AuthenticationUseCase<ViewFeedSched
 
     @Override
     protected ViewFeedScheduleResult executeBusiness(ViewFeedScheduleQuery command, UserSession userSession) {
-        int offset = (command.page() - 1) * command.limit();
-        List<FeedSchedule> feedSchedules = feedScheduleRepository.findByOrganizationId(userSession.getOrganizationId(), offset, command.limit());
+        Pagination pagination = new Pagination(command.page(), command.limit());
+        List<FeedSchedule> feedSchedules = feedScheduleRepository.findByOrganizationId(userSession.getOrganizationId(), pagination);
         return new ViewFeedScheduleResult(feedSchedules);
     }
 
     @Override
     protected void validateCommand(ViewFeedScheduleQuery command) {
-        if (command.page() < 1) {
-            throw new ValidationException("Page must be greater than 0");
-        }
 
-        if (command.limit() < 1) {
-            throw new ValidationException("Limit must be greater than 0");
-        }
     }
 }

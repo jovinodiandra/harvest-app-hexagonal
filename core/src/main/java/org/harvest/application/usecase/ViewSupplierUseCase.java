@@ -7,7 +7,9 @@ import org.harvest.application.port.outbound.SupplierRepository;
 import org.harvest.application.port.outbound.security.UserSession;
 import org.harvest.domain.Supplier;
 import org.harvest.shared.exception.ValidationException;
+import org.harvest.shared.query.Pagination;
 
+import java.awt.print.PageFormat;
 import java.util.List;
 
 public class ViewSupplierUseCase extends AuthenticationUseCase<ViewSupplierQuery, ViewSupplierResult> {
@@ -24,12 +26,12 @@ public class ViewSupplierUseCase extends AuthenticationUseCase<ViewSupplierQuery
 
     @Override
     protected ViewSupplierResult executeBusiness(ViewSupplierQuery command, UserSession userSession) {
-        int offset = (command.page() - 1) * command.limit();
+        Pagination pagination = new Pagination(command.page(),command.limit());
         List<Supplier> suppliers;
         if (command.name() == null || command.name().isBlank()) {
-            suppliers = supplierRepository.findAllByOrganization(userSession.getOrganizationId(), offset, command.limit());
+            suppliers = supplierRepository.findAllByOrganization(userSession.getOrganizationId(), pagination);
         } else {
-            suppliers = supplierRepository.findByName(userSession.getOrganizationId(), command.name(), offset, command.limit());
+            suppliers = supplierRepository.findByName(userSession.getOrganizationId(), command.name(), pagination);
         }
 
         return new ViewSupplierResult(suppliers);
@@ -37,17 +39,7 @@ public class ViewSupplierUseCase extends AuthenticationUseCase<ViewSupplierQuery
 
     @Override
     protected void validateCommand(ViewSupplierQuery command) {
-        if (command.page() < 1) {
-            throw new ValidationException("Page must be greater than 0");
-        }
 
-        if (command.limit() < 1) {
-            throw new ValidationException("Limit must be greater than 0");
-        }
-
-        if (command.limit() > 100) {
-            throw new ValidationException("Limit must be less than 100");
-        }
 
     }
 }
