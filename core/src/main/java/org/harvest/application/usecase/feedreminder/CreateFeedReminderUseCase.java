@@ -1,4 +1,4 @@
-package org.harvest.application.usecase.feed_reminder;
+package org.harvest.application.usecase.feedreminder;
 
 import org.harvest.application.dto.command.CreateFeedReminderCommand;
 import org.harvest.application.dto.result.CreateFeedReminderResult;

@@ -34,12 +34,6 @@ public class PostgreFeedPriceRepository implements FeedPriceRepository {
                     "FROM feed_price WHERE status = ? AND deleted_at IS NULL " +
                     "ORDER BY effective_date DESC";
 
-    // Query 4: Select all with pagination
-    private final String SELECT_ALL =
-            "SELECT id, name, price_per_kilo_gram, effective_date, status, description, " +
-                    "organization_id, deleted_by, deleted_at, created_at, updated_at " +
-                    "FROM feed_price WHERE organization_id = ? AND deleted_at IS NULL " +
-                    "ORDER BY created_at DESC LIMIT ? OFFSET ?";
 
     // Query 5: Count total records untuk pagination
     private final String COUNT_ALL =
@@ -51,11 +45,11 @@ public class PostgreFeedPriceRepository implements FeedPriceRepository {
 
     private static final String UPDATE =
             "UPDATE feed_price SET name = ?, price_per_kilo_gram = ?, effective_date = ?, " +
-                    "status = ?, description = ?,deleted_by = ?, deleted_at = ?,  updated_at = ? WHERE id = ? AND deleted_at IS NULL";
+                    "description=?, WHERE id = ?";
 
 
     private final String SOFT_DELETE =
-            "UPDATE feed_price SET deleted_by = ?, deleted_at = ? WHERE id = ?";
+            "UPDATE feed_price SET status='NONACTIVE', description=?,deleted_by = ?, deleted_at = ? WHERE id = ? and deleted_at is null";
 
 
     private final String EXISTS_ACTIVE_PRICE =
@@ -119,43 +113,44 @@ public class PostgreFeedPriceRepository implements FeedPriceRepository {
             PreparedStatement ps = connection.prepareStatement(UPDATE);
             ps.setString(1, feedPrice.getFeedName().getValue());
             ps.setBigDecimal(2, feedPrice.getPricePerKiloGram().getValue());
-            ps.setObject(3, feedPrice.getEffectiveDate());
-            ps.setString(4, feedPrice.getStatus().getDescription());
-            ps.setString(5, feedPrice.getDescription());
-            ps.setObject(6, feedPrice.getDeletedBy());
-            ps.setObject(7, feedPrice.getDeletedAt());
-            ps.setObject(8, feedPrice.getUpdatedAt());
-            ps.setObject(9, feedPrice.getId());
+            ps.setDate(3,Date.valueOf( feedPrice.getEffectiveDate()));
+            ps.setString(4, feedPrice.getDescription());
+            ps.setObject(7, feedPrice.getId());
             int affectedRows = ps.executeUpdate();
 
-            if (affectedRows == 0) {
+            if (affectedRows <= 0) {
                 throw new RuntimeException("Feed price not found ");
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RuntimeException("Failed update to feed price", e);
         }
     }
 
-//    @Override
-//    public void softDeleted(UUID id, UUID deletedBy, LocalDateTime deletedAt) {
-//        try (Connection connection = dataSource.getConnection()) {
-//            PreparedStatement ps = connection.prepareStatement(SOFT_DELETE);
+    @Override
+    public void delete(FeedPrice feedPrice) {
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement ps = connection.prepareStatement(SOFT_DELETE);
+            ps.setString(1, feedPrice.getDescription());
+            ps.setObject(2, feedPrice.getDeletedBy());
+            if (feedPrice.getDeletedAt() != null) {
+                ps.setTimestamp(3, Timestamp.valueOf(feedPrice.getDeletedAt()));
+            } else {
+                ps.setNull(3, Types.TIMESTAMP);
+            }
+            ps.setObject(4,feedPrice.getId());
+            int affectedRows = ps.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new RuntimeException("Feed price not found or already deleted");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed deleted to feed price", e);
+        }
+
 //
-//            ps.setObject(1, deletedBy);
-//            ps.setObject(2, deletedAt);
-//            ps.setObject(3, id);
-//            int affectedRows = ps.executeUpdate();
-//
-//            if (affectedRows == 0) {
-//                throw new RuntimeException("Feed price not found or already deleted");
-//            }
-//
-//        } catch (SQLException e) {
-//            throw new RuntimeException("Failed deleted to feed price", e);
-//        }
-//
-//
-//    }
+    }
 
     @Override
     public Optional<FeedPrice> findById(UUID id) {

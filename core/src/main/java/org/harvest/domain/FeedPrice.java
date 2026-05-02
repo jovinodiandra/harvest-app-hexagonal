@@ -5,7 +5,6 @@ import org.harvest.domain.value.FeedName;
 import org.harvest.domain.value.Price;
 import org.harvest.shared.exception.ValidationException;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -52,9 +51,9 @@ public class FeedPrice {
     }
 
 
-    public FeedPrice deactivate(UUID userId, LocalDateTime now) {
+    public FeedPrice deactivate(UUID userId, LocalDateTime now, String description) {
         if (this.status != FeedPriceStatus.ACTIVE) {
-            throw new ValidationException("Only active feed price can be deactivated");
+            throw new ValidationException("Feed price already nonactive");
         }
 
         return new FeedPrice(

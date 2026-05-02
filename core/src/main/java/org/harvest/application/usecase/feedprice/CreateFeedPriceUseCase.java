@@ -1,4 +1,4 @@
-package org.harvest.application.usecase.feed_price;
+package org.harvest.application.usecase.feedprice;
 
 import org.harvest.application.dto.command.CreateFeedPriceCommand;
 import org.harvest.application.dto.result.CreateFeedPriceResult;

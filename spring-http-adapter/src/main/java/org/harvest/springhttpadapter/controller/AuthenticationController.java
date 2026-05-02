@@ -191,8 +191,8 @@ public class AuthenticationController {
                             name = "Contoh Request Login",
                             value = """
                                     {
-                                      "email": "budi@ternaklele.com",
-                                      "password": "Password123!"
+                                      "email": "vino@gmail.com",
+                                      "password": "Qwerty12#"
                                     }
                                     """
                     )

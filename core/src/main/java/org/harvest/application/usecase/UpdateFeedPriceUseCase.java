@@ -30,7 +30,7 @@ public class UpdateFeedPriceUseCase extends AuthenticationUseCase<UpdateFeedPric
     @Override
     protected UpdateFeedPriceResult executeBusiness(UpdateFeedPriceCommand command, UserSession userSession) {
         Optional<FeedPrice> byId = feedPriceRepository.findById(command.id());
-        if (userSession.getRole() != Role.OWNER || userSession.getRole() != Role.ADMIN) {
+        if (!(userSession.getRole() == Role.OWNER || userSession.getRole() == Role.ADMIN)) {
             throw new ValidationException("role must be owner or admin");
         }
         FeedName feedName = new FeedName(command.feedName());

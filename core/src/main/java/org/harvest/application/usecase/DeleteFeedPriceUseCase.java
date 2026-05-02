@@ -28,24 +28,23 @@ public class DeleteFeedPriceUseCase extends AuthenticationUseCase<DeleteFeedPric
     @Override
     protected DeleteFeedPriceResult executeBusiness(DeleteFeedPriceCommand command, UserSession userSession) {
         FeedPrice feedPrice = feedPriceRepository.findById(command.id()).
-                orElseThrow(() -> new ValidationException("Feed price not found"));
+                                                 orElseThrow(() -> new ValidationException("Feed price not found"));
 
-//        if (feedPrice.getStatus() != FeedPriceStatus.NONACTIVE) {
-//            throw new ValidationException("only nonactive data can be deleted");
-//        }
         if (!(userSession.getRole() == Role.OWNER || userSession.getRole() == Role.ADMIN)) {
             throw new ValidationException("role must be owner or admin");
         }
-        feedPrice.deactivate(userSession.getUserId(),LocalDateTime.now());
-        feedPriceRepository.update(feedPrice);
+
+        LocalDateTime now = LocalDateTime.now();
+        FeedPrice delete = feedPrice.deactivate(userSession.getUserId(), now, command.description());
+        feedPriceRepository.delete(delete);
         return new DeleteFeedPriceResult(
                 feedPrice.getId(),
                 feedPrice.getFeedName().getValue(),
                 feedPrice.getPricePerKiloGram().getValue(),
                 feedPrice.getEffectiveDate(),
-                FeedPriceStatus.NONACTIVE,
+                feedPrice.getStatus(),
                 feedPrice.getDescription(),
-                LocalDateTime.now(),
+                now,
                 userSession.getUserId());
     }
 
@@ -56,7 +55,7 @@ public class DeleteFeedPriceUseCase extends AuthenticationUseCase<DeleteFeedPric
             throw new ValidationException("description is required");
         }
 
-        if (command.description().length() > 10){
+        if (command.description().length() < 10) {
             throw new ValidationException("description must be than greater 10 character");
         }
 

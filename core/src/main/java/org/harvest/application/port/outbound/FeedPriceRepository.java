@@ -5,6 +5,7 @@ import org.harvest.domain.FeedPrice;
 import org.harvest.domain.value.FeedName;
 import org.harvest.shared.query.Pagination;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -15,7 +16,7 @@ public interface FeedPriceRepository {
 
     void update(FeedPrice feedPrice);
 
-//    void softDeleted(UUID id, UUID deletedBy, LocalDateTime deletedAt);
+    void delete(FeedPrice feedPrice);
 
     Optional<FeedPrice> findById (UUID id);
 

@@ -18,9 +18,9 @@ import org.harvest.application.usecase.death.DeleteDeathRecordUseCase;
 import org.harvest.application.usecase.death.UpdateDeathRecordUseCase;
 import org.harvest.application.usecase.death.ViewDeathRecordUseCase;
 import org.harvest.application.usecase.diseases.CreateDiseasesRecordUseCase;
-import org.harvest.application.usecase.feed_price.CreateFeedPriceUseCase;
-import org.harvest.application.usecase.feed_reminder.CreateFeedReminderUseCase;
-import org.harvest.application.usecase.feed_schedule.CreateFeedScheduleUseCase;
+import org.harvest.application.usecase.feedprice.CreateFeedPriceUseCase;
+import org.harvest.application.usecase.feedreminder.CreateFeedReminderUseCase;
+import org.harvest.application.usecase.feedschedule.CreateFeedScheduleUseCase;
 import org.harvest.application.usecase.finance.CreateFinanceRecordUseCase;
 import org.harvest.application.usecase.growth.CreateGrowthRecordUseCase;
 import org.harvest.application.usecase.harvest.CreateHarvestRecordUseCase;
@@ -354,6 +354,15 @@ public class UseCaseConfiguration {
     @Bean("viewFeedPriceUseCase")
     public UseCase<ViewFeedPriceQuery, ViewFeedPriceResult> viewFeedPriceUseCase(FeedPriceRepository feedPriceRepository){
         return new ViewFeedPriceUseCase(feedPriceRepository);
+    }
+    @Bean("updateFeedPriceUseCase")
+    public UseCase<UpdateFeedPriceCommand, UpdateFeedPriceResult> updateFeedPriceUseCase(FeedPriceRepository feedPriceRepository){
+        return new UpdateFeedPriceUseCase(feedPriceRepository);
+    }
+
+    @Bean("deleteFeedPriceUseCase")
+    public UseCase<DeleteFeedPriceCommand, DeleteFeedPriceResult> deleteFeedPriceUseCase(FeedPriceRepository feedPriceRepository){
+        return new DeleteFeedPriceUseCase(feedPriceRepository);
     }
 }
 
