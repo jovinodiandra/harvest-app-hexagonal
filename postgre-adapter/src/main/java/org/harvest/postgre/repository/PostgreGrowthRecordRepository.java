@@ -119,7 +119,8 @@ public class PostgreGrowthRecordRepository implements GrowthRecordRepository {
              PreparedStatement ps = conn.prepareStatement(SELECT_BY_PONDS_AND_ORGANIZATION)) {
             ps.setObject(1, pondsId);
             ps.setObject(2, organizationId);
-            ps.setObject(3, pagination);
+            ps.setObject(3, pagination.getLimit());
+            ps.setObject(4, pagination.offset());
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     list.add(mapRow(rs));

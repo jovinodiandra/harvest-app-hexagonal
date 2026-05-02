@@ -17,52 +17,63 @@ public class FeedPrice {
     private final LocalDate effectiveDate;
     private final FeedPriceStatus status;
     private final String description;
-    private final LocalDateTime createdAt;
     private final UUID organizationId;
     private final UUID deletedBy;
     private final LocalDateTime deletedAt;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
 
-    public FeedPrice(UUID id, FeedName feedName, Price pricePerKiloGram, LocalDate effectiveDate, FeedPriceStatus status, String description, LocalDateTime createdAt, UUID organizationId, UUID deletedBy, LocalDateTime deletedAt) {
+    public FeedPrice(UUID id, FeedName feedName, Price pricePerKiloGram, LocalDate effectiveDate, FeedPriceStatus status, String description, UUID organizationId, UUID deletedBy, LocalDateTime deletedAt, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.feedName = feedName;
         this.pricePerKiloGram = pricePerKiloGram;
         this.effectiveDate = effectiveDate;
         this.status = status;
         this.description = description;
-        this.createdAt = createdAt;
         this.organizationId = organizationId;
         this.deletedBy = deletedBy;
         this.deletedAt = deletedAt;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
-    public static FeedPrice create(UUID id, FeedName feedName, Price pricePerKiloGram, String description, LocalDate effectiveDate, UUID organizationId) {
+    public static FeedPrice create(UUID id, FeedName feedName, Price pricePerKiloGram, LocalDate effectiveDate, String description, UUID organizationId) {
         return new FeedPrice(id,
                 feedName,
                 pricePerKiloGram,
                 effectiveDate,
                 FeedPriceStatus.ACTIVE,
                 description,
-                LocalDateTime.now(),
                 organizationId,
                 null,
-                null);
-    }
-
-    public  FeedPrice markAsDeleted(UUID userId){
-        return new FeedPrice(this.id,
-                this.feedName,
-                this.pricePerKiloGram,
-                this.effectiveDate,
-                FeedPriceStatus.NONACTIVE,
-                description,
-                this.createdAt,
-                organizationId,
-                userId,
+                null,
+                LocalDateTime.now(),
                 LocalDateTime.now());
     }
 
+
+    public FeedPrice deactivate(UUID userId, LocalDateTime now) {
+        if (this.status != FeedPriceStatus.ACTIVE) {
+            throw new ValidationException("Only active feed price can be deactivated");
+        }
+
+        return new FeedPrice(
+                id,
+                feedName,
+                pricePerKiloGram,
+                effectiveDate,
+                FeedPriceStatus.NONACTIVE,
+                description,
+                organizationId,
+                userId,
+                now,
+                this.createdAt,
+                now
+        );
+    }
+
     public FeedPrice update(FeedName feedName, Price price, LocalDate effectiveDate, String description) {
-        if (this.status == FeedPriceStatus.NONACTIVE){
+        if (this.status == FeedPriceStatus.NONACTIVE) {
             throw new ValidationException("cannot update deleted feed price");
         }
         return new FeedPrice(
@@ -70,10 +81,13 @@ public class FeedPrice {
                 feedName,
                 price,
                 effectiveDate,
-                FeedPriceStatus.ACTIVE,
+                this.status,
                 description,
+                this.organizationId,
+                deletedBy,
+                deletedAt,
                 this.createdAt,
-                this.organizationId, deletedBy, deletedAt);
+                this.updatedAt);
     }
 
 
@@ -81,12 +95,16 @@ public class FeedPrice {
         return id;
     }
 
-    public String getFeedName() {
-        return feedName.getValue();
+    public UUID getOrganizationId() {
+        return this.organizationId;
     }
 
-    public BigDecimal getPricePerKiloGram() {
-        return pricePerKiloGram.getValue();
+    public FeedName getFeedName() {
+        return this.feedName;
+    }
+
+    public Price getPricePerKiloGram() {
+        return this.pricePerKiloGram;
     }
 
     public LocalDate getEffectiveDate() {
@@ -103,6 +121,18 @@ public class FeedPrice {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public UUID getDeletedBy() {
+        return deletedBy;
+    }
+
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
 

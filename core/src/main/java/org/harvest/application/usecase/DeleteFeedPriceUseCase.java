@@ -30,18 +30,18 @@ public class DeleteFeedPriceUseCase extends AuthenticationUseCase<DeleteFeedPric
         FeedPrice feedPrice = feedPriceRepository.findById(command.id()).
                 orElseThrow(() -> new ValidationException("Feed price not found"));
 
-        if (feedPrice.getStatus() != FeedPriceStatus.NONACTIVE) {
-            throw new ValidationException("only nonactive data can be deleted");
-        }
+//        if (feedPrice.getStatus() != FeedPriceStatus.NONACTIVE) {
+//            throw new ValidationException("only nonactive data can be deleted");
+//        }
         if (!(userSession.getRole() == Role.OWNER || userSession.getRole() == Role.ADMIN)) {
             throw new ValidationException("role must be owner or admin");
         }
-
-        feedPriceRepository.delete(feedPrice);
+        feedPrice.deactivate(userSession.getUserId(),LocalDateTime.now());
+        feedPriceRepository.update(feedPrice);
         return new DeleteFeedPriceResult(
                 feedPrice.getId(),
-                feedPrice.getFeedName(),
-                feedPrice.getPricePerKiloGram(),
+                feedPrice.getFeedName().getValue(),
+                feedPrice.getPricePerKiloGram().getValue(),
                 feedPrice.getEffectiveDate(),
                 FeedPriceStatus.NONACTIVE,
                 feedPrice.getDescription(),

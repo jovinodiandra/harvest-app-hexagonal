@@ -38,7 +38,7 @@ public class UpdateFeedPriceUseCase extends AuthenticationUseCase<UpdateFeedPric
 
         FeedPrice update = byId.orElseThrow().update(feedName, pricePerKiloGram, command.effectiveDate(), command.description());
         feedPriceRepository.update(update);
-        return new UpdateFeedPriceResult(update.getId(), update.getFeedName(), update.getPricePerKiloGram(), update.getEffectiveDate(), update.getStatus(), update.getDescription(), update.getCreatedAt());
+        return new UpdateFeedPriceResult(update.getId(), update.getFeedName().getValue(), update.getPricePerKiloGram().getValue(), update.getEffectiveDate(), update.getStatus(), update.getDescription(), update.getCreatedAt());
     }
 
     @Override

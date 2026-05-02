@@ -1,4 +1,4 @@
-package org.harvest.application.usecase;
+package org.harvest.application.usecase.contact;
 
 import org.harvest.application.dto.command.DeleteContactCommand;
 import org.harvest.application.dto.result.DefaultResult;

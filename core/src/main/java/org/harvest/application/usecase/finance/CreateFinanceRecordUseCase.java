@@ -1,4 +1,4 @@
-package org.harvest.application.usecase;
+package org.harvest.application.usecase.finance;
 
 import org.harvest.application.dto.command.CreateFinanceRecordCommand;
 import org.harvest.application.dto.result.CreateFinanceRecordResult;

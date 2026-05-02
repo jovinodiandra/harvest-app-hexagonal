@@ -11,6 +11,7 @@
   import HarvestPage from '../pages/harvest/ui/HarvestPage.svelte';
   import WaterQualityPage from '../pages/water-quality/ui/WaterQualityPage.svelte';
   import FeedSchedulesPage from '../pages/feed-schedules/ui/FeedSchedulesPage.svelte';
+  import FeedPricesPage from '../pages/feed-prices/ui/FeedPricesPage.svelte';
   import GrowthRecordsPage from '../pages/growth-records/ui/GrowthRecordsPage.svelte';
   import DeathRecordsPage from '../pages/death-records/ui/DeathRecordsPage.svelte';
   import DiseasesPage from '../pages/diseases/ui/DiseasesPage.svelte';
@@ -49,6 +50,8 @@
   <SeedsPage />
 {:else if currentPath === '/feed-schedules'}
   <FeedSchedulesPage />
+{:else if currentPath === '/feed-prices'}
+  <FeedPricesPage />
 {:else if currentPath === '/growth-records'}
   <GrowthRecordsPage />
 {:else if currentPath === '/death-records'}

@@ -2,7 +2,7 @@ package org.harvest.notification.adapter;
 
 import org.harvest.application.port.outbound.LogManager;
 import org.harvest.application.port.outbound.NotificationSender;
-import org.harvest.domain.LogCategory;
+import org.harvest.application.dto.value.LogCategory;
 import org.harvest.domain.Notification;
 
 import java.time.LocalDateTime;

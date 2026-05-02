@@ -3,6 +3,7 @@ package org.harvest.postgre.repository;
 import org.harvest.application.port.outbound.ContactRepository;
 import org.harvest.domain.Contact;
 import org.harvest.postgre.config.DatabaseConfig;
+import org.harvest.shared.query.Pagination;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -94,7 +95,7 @@ public class PostgreContactRepository implements ContactRepository {
     }
 
     @Override
-    public List<Contact> findByFilter(UUID supplierId, String name, int offset, int limit) {
+    public List<Contact> findByFilter(UUID supplierId, String name, Pagination pagination) {
         List<Contact> list = new ArrayList<>();
         String searchPattern = name != null && !name.isBlank() ? "%" + name + "%" : null;
         try (Connection conn = dataSource.getConnection();
@@ -102,8 +103,9 @@ public class PostgreContactRepository implements ContactRepository {
             ps.setObject(1, supplierId);
             ps.setString(2, searchPattern);
             ps.setString(3, searchPattern);
-            ps.setInt(4, limit);
-            ps.setInt(5, offset);
+            ps.setObject(4, pagination.getLimit());
+            ps.setObject(5, pagination.offset());
+
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     list.add(mapRow(rs));

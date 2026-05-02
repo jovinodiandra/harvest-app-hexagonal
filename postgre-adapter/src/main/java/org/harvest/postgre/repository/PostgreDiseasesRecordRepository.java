@@ -103,7 +103,8 @@ public class PostgreDiseasesRecordRepository implements DiseasesRecordRepository
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_BY_PONDS)) {
             ps.setObject(1, pondsId);
-            ps.setObject(2,pagination);
+            ps.setObject(2,pagination.getLimit());
+            ps.setObject(3,pagination.offset());
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     list.add(mapRow(rs));

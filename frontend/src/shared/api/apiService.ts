@@ -6,6 +6,7 @@ import type {
   Pond,
   Seed,
   FeedSchedule,
+  FeedPrice,
   GrowthRecord,
   DeathRecord,
   WaterQuality,
@@ -63,6 +64,14 @@ function mapRole(role: string): 'owner' | 'admin' | 'user' {
   if (normalized === 'admin') return 'admin';
   if (normalized === 'staff' || normalized === 'user') return 'user';
   return 'user';
+}
+
+function extractBackendData<T>(response: ApiResponse<BackendResponse<T>>): T | null {
+  if (!response.success || !response.data) {
+    return null;
+  }
+
+  return (response.data.data ?? response.data) as T;
 }
 
 export const apiService = {
@@ -456,6 +465,109 @@ export const apiService = {
 
   async deleteFeedSchedule(id: string): Promise<ApiResponse<void>> {
     const response = await apiDelete<BackendResponse<void>>(`/feed-schedules/${id}`);
+    return { success: response.success, error: response.error };
+  },
+
+  async getFeedPrices(
+    page = 1,
+    limit = 10,
+    status: 'ACTIVE' | 'NONACTIVE' | 'ALL' = 'ACTIVE'
+  ): Promise<ApiResponse<PaginatedResponse<FeedPrice>>> {
+    const response = await apiGet<BackendResponse<{ feedPrices?: any[] }>>(
+      `/feed-prices?page=${page}&limit=${limit}&status=${status}`
+    );
+
+    const dataPayload = extractBackendData<{ feedPrices?: any[]; data?: any[] }>(response);
+    const rawFeedPrices = Array.isArray(dataPayload)
+      ? dataPayload
+      : dataPayload?.feedPrices ?? dataPayload?.data ?? [];
+
+    if (response.success && rawFeedPrices) {
+      const feedPrices = (rawFeedPrices || []).map((f: any) => ({
+        id: f.id,
+        feedName: f.feedName,
+        pricePerKiloGram: f.pricePerKiloGram,
+        effectiveDate: f.effectiveDate,
+        status: (f.status || 'ACTIVE') as 'ACTIVE' | 'NONACTIVE',
+        description: f.description || '',
+        createdAt: f.createdAt,
+        organizationId: '',
+      }));
+      return {
+        success: true,
+        data: {
+          data: feedPrices,
+          page,
+          limit,
+          total: feedPrices.length,
+          totalPages: Math.ceil(feedPrices.length / limit),
+        },
+      };
+    }
+
+    return { success: false, error: response.error || response.data?.message || 'Terjadi kesalahan' };
+  },
+
+  async createFeedPrice(feedPrice: Omit<FeedPrice, 'id'>): Promise<ApiResponse<FeedPrice>> {
+    const response = await apiPost<BackendResponse<any>>('/feed-prices', {
+      feedName: feedPrice.feedName,
+      pricePerKiloGram: feedPrice.pricePerKiloGram,
+      effectiveDate: feedPrice.effectiveDate,
+      description: feedPrice.description,
+    });
+
+    const f = extractBackendData<any>(response);
+    if (response.success && f) {
+      return {
+        success: true,
+        data: {
+          id: f.id,
+          feedName: f.feedName,
+          pricePerKiloGram: f.pricePerKiloGram,
+          effectiveDate: f.effectiveDate,
+          status: (f.status || 'ACTIVE') as 'ACTIVE' | 'NONACTIVE',
+          description: f.description || '',
+          createdAt: f.createdAt,
+          organizationId: '',
+        },
+      };
+    }
+
+    return { success: false, error: response.error || response.data?.message || 'Terjadi kesalahan' };
+  },
+
+  async updateFeedPrice(id: string, data: Partial<FeedPrice>): Promise<ApiResponse<FeedPrice>> {
+    const response = await apiPut<BackendResponse<any>>(`/feed-prices/${id}`, {
+      feedName: data.feedName,
+      pricePerKiloGram: data.pricePerKiloGram,
+      effectiveDate: data.effectiveDate,
+      description: data.description,
+    });
+
+    if (response.success) {
+      const f = extractBackendData<any>(response);
+      if (f && f.id) {
+        return {
+          success: true,
+          data: {
+            id: f.id,
+            feedName: f.feedName,
+            pricePerKiloGram: f.pricePerKiloGram,
+            effectiveDate: f.effectiveDate,
+            status: (f.status || 'ACTIVE') as 'ACTIVE' | 'NONACTIVE',
+            description: f.description || '',
+            createdAt: f.createdAt,
+            organizationId: '',
+          },
+        };
+      }
+    }
+
+    return { success: false, error: response.error || response.data?.message || 'Terjadi kesalahan' };
+  },
+
+  async deleteFeedPrice(id: string): Promise<ApiResponse<void>> {
+    const response = await apiDelete<BackendResponse<void>>(`/feed-prices/${id}`);
     return { success: response.success, error: response.error };
   },
 

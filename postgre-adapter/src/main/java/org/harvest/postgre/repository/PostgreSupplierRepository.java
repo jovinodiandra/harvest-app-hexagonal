@@ -123,7 +123,8 @@ public class PostgreSupplierRepository implements SupplierRepository {
             ps.setObject(1, organizationId);
             ps.setString(2, searchPattern);
             ps.setString(3, searchPattern);
-            ps.setObject(4, pagination);
+            ps.setObject(4, pagination.getLimit());
+            ps.setObject(5, pagination.offset());
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {

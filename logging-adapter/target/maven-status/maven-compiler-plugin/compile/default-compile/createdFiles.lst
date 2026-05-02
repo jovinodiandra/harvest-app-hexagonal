@@ -1,4 +1,4 @@
-org/harvest/logging/adapter/Slf4jLogAdapter$1.class
-org/harvest/logging/adapter/Slf4jLogAdapter.class
-org/harvest/logging/adapter/ConsoleLogAdapter.class
-org/harvest/logging/adapter/ConsoleLogAdapter$1.class
+org\harvest\logging\adapter\Slf4jLogAdapter$1.class
+org\harvest\logging\adapter\ConsoleLogAdapter$1.class
+org\harvest\logging\adapter\Slf4jLogAdapter.class
+org\harvest\logging\adapter\ConsoleLogAdapter.class

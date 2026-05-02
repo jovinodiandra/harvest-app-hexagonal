@@ -1,4 +1,4 @@
-package org.harvest.application.usecase;
+package org.harvest.application.usecase.harvest;
 
 import org.harvest.application.dto.command.CreateHarvestReminderCommand;
 import org.harvest.application.dto.result.CreateHarvestReminderResult;

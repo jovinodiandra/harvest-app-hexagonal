@@ -1,4 +1,4 @@
-package org.harvest.application.usecase;
+package org.harvest.application.usecase.feed_price;
 
 import org.harvest.application.dto.command.CreateFeedPriceCommand;
 import org.harvest.application.dto.result.CreateFeedPriceResult;
@@ -37,14 +37,14 @@ public class CreateFeedPriceUseCase extends AuthenticationUseCase<CreateFeedPric
                 feedPriceRepository.nextId(),
                 feedName,
                 price,
-                command.description(),
                 command.effectiveDate(),
+                command.description(),
                 userSession.getOrganizationId());
         feedPriceRepository.save(feedPrice);
         return new CreateFeedPriceResult(
                 feedPrice.getId(),
-                feedPrice.getFeedName(),
-                feedPrice.getPricePerKiloGram(),
+                feedPrice.getFeedName().getValue(),
+                feedPrice.getPricePerKiloGram().getValue(),
                 feedPrice.getEffectiveDate(),
                 feedPrice.getStatus(),
                 feedPrice.getDescription(),

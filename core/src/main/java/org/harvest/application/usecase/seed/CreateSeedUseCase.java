@@ -1,4 +1,4 @@
-package org.harvest.application.usecase;
+package org.harvest.application.usecase.seed;
 
 import org.harvest.application.dto.command.CreateSeedCommand;
 import org.harvest.application.dto.result.CreateSeedResult;

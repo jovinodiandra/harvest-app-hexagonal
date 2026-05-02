@@ -6,6 +6,7 @@ import type {
   Pond,
   Seed,
   FeedSchedule,
+  FeedPrice,
   GrowthRecord,
   DeathRecord,
   WaterQuality,
@@ -33,6 +34,7 @@ let users = [...mockData.mockUsers];
 let ponds = [...mockData.mockPonds];
 let seeds = [...mockData.mockSeeds];
 let feedSchedules = [...mockData.mockFeedSchedules];
+let feedPrices = [...mockData.mockFeedPrices];
 let growthRecords = [...mockData.mockGrowthRecords];
 let deathRecords = [...mockData.mockDeathRecords];
 let waterQuality = [...mockData.mockWaterQuality];
@@ -206,6 +208,39 @@ export const mockService = {
   async deleteFeedSchedule(id: string): Promise<ApiResponse<void>> {
     await delay();
     feedSchedules = feedSchedules.filter(f => f.id !== id);
+    return { success: true };
+  },
+
+  // Feed Prices
+  async getFeedPrices(page = 1, limit = 10, status: 'ACTIVE' | 'NONACTIVE' | 'ALL' = 'ACTIVE'): Promise<ApiResponse<PaginatedResponse<FeedPrice>>> {
+    await delay();
+    let filtered = feedPrices;
+    if (status !== 'ALL') {
+      filtered = feedPrices.filter((f) => f.status === status);
+    }
+    return { success: true, data: createPaginatedResponse(filtered, page, limit) };
+  },
+
+  async createFeedPrice(feedPrice: Omit<FeedPrice, 'id'>): Promise<ApiResponse<FeedPrice>> {
+    await delay();
+    const newFeedPrice: FeedPrice = { ...feedPrice, id: generateId('feed-price') };
+    feedPrices.unshift(newFeedPrice);
+    return { success: true, data: newFeedPrice };
+  },
+
+  async updateFeedPrice(id: string, data: Partial<FeedPrice>): Promise<ApiResponse<FeedPrice>> {
+    await delay();
+    const index = feedPrices.findIndex((f) => f.id === id);
+    if (index === -1) return { success: false, error: 'Feed price not found' };
+    feedPrices[index] = { ...feedPrices[index], ...data };
+    return { success: true, data: feedPrices[index] };
+  },
+
+  async deleteFeedPrice(id: string): Promise<ApiResponse<void>> {
+    await delay();
+    const index = feedPrices.findIndex((f) => f.id === id);
+    if (index === -1) return { success: false, error: 'Feed price not found' };
+    feedPrices[index] = { ...feedPrices[index], status: 'NONACTIVE' };
     return { success: true };
   },
 

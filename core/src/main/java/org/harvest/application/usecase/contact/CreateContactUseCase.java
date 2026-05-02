@@ -1,4 +1,4 @@
-package org.harvest.application.usecase;
+package org.harvest.application.usecase.contact;
 
 import org.harvest.application.dto.command.CreateContactCommand;
 import org.harvest.application.dto.result.CreateContactResult;

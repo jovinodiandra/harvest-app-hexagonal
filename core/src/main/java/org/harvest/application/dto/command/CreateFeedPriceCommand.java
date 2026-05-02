@@ -5,5 +5,10 @@ import org.harvest.application.port.outbound.security.UserSession;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public record CreateFeedPriceCommand(UserSession session,String feedName, BigDecimal pricePerKiloGram, LocalDate effectiveDate, String description ) {
+public record CreateFeedPriceCommand(
+        UserSession session,
+        String feedName,
+        BigDecimal pricePerKiloGram,
+        LocalDate effectiveDate,
+        String description ) {
 }

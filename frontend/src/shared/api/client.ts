@@ -1,36 +1,43 @@
-import type { ApiResponse, PaginatedResponse } from '../types';
+import type { ApiResponse, PaginatedResponse } from "../types";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
 interface RequestConfig {
-  method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  method?: "GET" | "POST" | "PUT" | "DELETE";
   body?: unknown;
   headers?: Record<string, string>;
 }
 
 function getAuthToken(): string | null {
-  const session = localStorage.getItem('session');
-  if (session) {
-    const parsed = JSON.parse(session);
-    return parsed.token;
+  const session = localStorage.getItem("session");
+  if (!session) {
+    return null;
   }
-  return null;
+
+  try {
+    const parsed = JSON.parse(session);
+    return parsed?.token ?? null;
+  } catch (error) {
+    console.warn("Invalid session data in localStorage:", session, error);
+    localStorage.removeItem("session");
+    return null;
+  }
 }
 
 export async function apiRequest<T>(
   endpoint: string,
-  config: RequestConfig = {}
+  config: RequestConfig = {},
 ): Promise<ApiResponse<T>> {
-  const { method = 'GET', body, headers = {} } = config;
+  const { method = "GET", body, headers = {} } = config;
   const token = getAuthToken();
 
   const requestHeaders: Record<string, string> = {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
     ...headers,
   };
 
   if (token) {
-    requestHeaders['Authorization'] = `Bearer ${token}`;
+    requestHeaders["Authorization"] = `Bearer ${token}`;
   }
 
   try {
@@ -54,39 +61,50 @@ export async function apiRequest<T>(
       data,
     };
   } catch (error) {
-    if (error instanceof TypeError && error.message === 'Failed to fetch') {
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
       return {
         success: false,
-        error: 'Tidak dapat terhubung ke server. Pastikan backend berjalan di ' + API_BASE_URL,
+        error:
+          "Tidak dapat terhubung ke server. Pastikan backend berjalan di " +
+          API_BASE_URL,
       };
     }
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Terjadi kesalahan yang tidak diketahui',
+      error:
+        error instanceof Error
+          ? error.message
+          : "Terjadi kesalahan yang tidak diketahui",
     };
   }
 }
 
 export async function apiGet<T>(endpoint: string): Promise<ApiResponse<T>> {
-  return apiRequest<T>(endpoint, { method: 'GET' });
+  return apiRequest<T>(endpoint, { method: "GET" });
 }
 
-export async function apiPost<T>(endpoint: string, body: unknown): Promise<ApiResponse<T>> {
-  return apiRequest<T>(endpoint, { method: 'POST', body });
+export async function apiPost<T>(
+  endpoint: string,
+  body: unknown,
+): Promise<ApiResponse<T>> {
+  return apiRequest<T>(endpoint, { method: "POST", body });
 }
 
-export async function apiPut<T>(endpoint: string, body: unknown): Promise<ApiResponse<T>> {
-  return apiRequest<T>(endpoint, { method: 'PUT', body });
+export async function apiPut<T>(
+  endpoint: string,
+  body: unknown,
+): Promise<ApiResponse<T>> {
+  return apiRequest<T>(endpoint, { method: "PUT", body });
 }
 
 export async function apiDelete<T>(endpoint: string): Promise<ApiResponse<T>> {
-  return apiRequest<T>(endpoint, { method: 'DELETE' });
+  return apiRequest<T>(endpoint, { method: "DELETE" });
 }
 
 export function createPaginatedResponse<T>(
   data: T[],
   page: number = 1,
-  limit: number = 10
+  limit: number = 10,
 ): PaginatedResponse<T> {
   const start = (page - 1) * limit;
   const end = start + limit;

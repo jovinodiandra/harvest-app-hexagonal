@@ -1,4 +1,4 @@
-org/harvest/notification/adapter/SmtpConfig.class
-org/harvest/notification/adapter/ConsoleNotificationAdapter.class
-org/harvest/notification/adapter/SmtpNotificationAdapter$1.class
-org/harvest/notification/adapter/SmtpNotificationAdapter.class
+org\harvest\notification\adapter\ConsoleNotificationAdapter.class
+org\harvest\notification\adapter\SmtpNotificationAdapter$1.class
+org\harvest\notification\adapter\SmtpConfig.class
+org\harvest\notification\adapter\SmtpNotificationAdapter.class

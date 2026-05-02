@@ -1,4 +1,4 @@
-package org.harvest.application.usecase;
+package org.harvest.application.usecase.feed_schedule;
 
 import org.harvest.application.dto.command.CreateFeedScheduleCommand;
 import org.harvest.application.dto.result.CreateFeedScheduleResult;

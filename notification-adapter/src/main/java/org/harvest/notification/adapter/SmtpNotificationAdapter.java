@@ -11,9 +11,10 @@ import jakarta.mail.internet.MimeMessage;
 import org.harvest.application.port.outbound.LogManager;
 import org.harvest.application.port.outbound.NotificationSender;
 import org.harvest.application.port.outbound.UserRepository;
-import org.harvest.domain.LogCategory;
+import org.harvest.application.dto.value.LogCategory;
 import org.harvest.domain.Notification;
 import org.harvest.domain.User;
+import org.harvest.shared.query.Pagination;
 
 import java.util.List;
 import java.util.Map;
@@ -70,7 +71,9 @@ public class SmtpNotificationAdapter implements NotificationSender {
 
     @Override
     public void sendToOrganization(UUID organizationId, Notification notification) {
-        List<User> users = userRepository.findAllByOrganizationId(organizationId, 0, 1000);
+        int page = 0;
+        int limit = 100;
+        List<User> users = userRepository.findAllByOrganizationId(organizationId, new Pagination(page, limit));
 
         if (users.isEmpty()) {
             logManager.warn(LogCategory.NOTIFICATION,

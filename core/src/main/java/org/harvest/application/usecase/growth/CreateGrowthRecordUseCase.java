@@ -1,4 +1,4 @@
-package org.harvest.application.usecase;
+package org.harvest.application.usecase.growth;
 
 import org.harvest.application.dto.command.CreateGrowthRecordCommand;
 import org.harvest.application.dto.result.CreateGrowthRecordResult;

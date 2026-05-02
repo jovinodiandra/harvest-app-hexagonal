@@ -124,7 +124,8 @@ public class PostgreHarvestRecordRepository implements HarvestRecordRepository {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_BY_ORGANIZATION)) {
             ps.setObject(1, organizationId);
-            ps.setObject(2, pagination);
+            ps.setObject(2, pagination.getLimit());
+            ps.setObject(3, pagination.offset());
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     list.add(mapRow(rs));

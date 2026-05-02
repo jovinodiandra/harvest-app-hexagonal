@@ -5,7 +5,7 @@ import org.harvest.application.port.outbound.NotificationSender;
 import org.harvest.application.port.service.ReminderSchedulerService;
 import org.harvest.domain.FeedReminder;
 import org.harvest.domain.HarvestReminder;
-import org.harvest.domain.LogCategory;
+import org.harvest.application.dto.value.LogCategory;
 import org.harvest.domain.Notification;
 import org.harvest.domain.Ponds;
 

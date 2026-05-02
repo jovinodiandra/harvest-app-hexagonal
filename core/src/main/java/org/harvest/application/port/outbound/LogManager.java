@@ -1,8 +1,8 @@
 package org.harvest.application.port.outbound;
 
 import org.harvest.domain.Log;
-import org.harvest.domain.LogCategory;
-import org.harvest.domain.LogLevel;
+import org.harvest.application.dto.value.LogCategory;
+import org.harvest.application.dto.value.LogLevel;
 
 import java.time.Instant;
 import java.util.List;

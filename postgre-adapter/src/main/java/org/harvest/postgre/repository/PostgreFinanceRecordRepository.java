@@ -117,7 +117,8 @@ public class PostgreFinanceRecordRepository implements FinanceRecordRepository {
             ps.setObject(5, startDate);
             ps.setObject(6, endDate);
             ps.setObject(7, endDate);
-          ps.setObject(8, pagination);
+          ps.setObject(8, pagination.getLimit());
+          ps.setObject(9, pagination.offset());
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     list.add(mapRow(rs));

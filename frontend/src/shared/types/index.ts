@@ -51,6 +51,17 @@ export interface FeedSchedule {
   organizationId: string;
 }
 
+export interface FeedPrice {
+  id: string;
+  feedName: string;
+  pricePerKiloGram: number;
+  effectiveDate: string;
+  status: 'ACTIVE' | 'NONACTIVE';
+  description: string;
+  createdAt?: string;
+  organizationId: string;
+}
+
 export interface GrowthRecord {
   id: string;
   pondsId: string;

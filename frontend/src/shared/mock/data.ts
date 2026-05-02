@@ -4,6 +4,7 @@ import type {
   Pond,
   Seed,
   FeedSchedule,
+  FeedPrice,
   GrowthRecord,
   DeathRecord,
   WaterQuality,
@@ -55,6 +56,27 @@ export const mockFeedSchedules: FeedSchedule[] = [
   { id: 'feed-004', pondsId: 'pond-002', feedType: 'HI-PRO', feedAmount: 4, feedTime: '07:30', organizationId: ORG_ID },
   { id: 'feed-005', pondsId: 'pond-002', feedType: 'HI-PRO', feedAmount: 4, feedTime: '17:30', organizationId: ORG_ID },
   { id: 'feed-006', pondsId: 'pond-003', feedType: 'PF-500', feedAmount: 6, feedTime: '08:00', organizationId: ORG_ID },
+];
+
+export const mockFeedPrices: FeedPrice[] = [
+  {
+    id: 'feed-price-001',
+    feedName: 'PF-1000',
+    pricePerKiloGram: 12500,
+    effectiveDate: '2026-03-01',
+    status: 'ACTIVE',
+    description: 'Harga awal Maret',
+    organizationId: ORG_ID,
+  },
+  {
+    id: 'feed-price-002',
+    feedName: 'HI-PRO-VITE 781',
+    pricePerKiloGram: 13800,
+    effectiveDate: '2026-03-10',
+    status: 'ACTIVE',
+    description: 'Supplier utama',
+    organizationId: ORG_ID,
+  },
 ];
 
 export const mockGrowthRecords: GrowthRecord[] = [

@@ -1,35 +1,44 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { Plus, Edit2, Trash2, Clock, Calendar } from 'lucide-svelte';
-  import { MainLayout } from '../../../widgets';
-  import { Button, Card, Modal, Input, Select, Table, Pagination, Alert } from '../../../shared/ui';
-  import { api } from '../../../shared/api';
-  import { pondStore, pondsForSelect } from '../../../entities/pond';
-  import type { FeedSchedule } from '../../../shared/types';
+  import { onMount } from "svelte";
+  import { Plus, Edit2, Trash2, Clock, Calendar } from "lucide-svelte";
+  import { MainLayout } from "../../../widgets";
+  import {
+    Button,
+    Card,
+    Modal,
+    Input,
+    Select,
+    Table,
+    Pagination,
+    Alert,
+  } from "../../../shared/ui";
+  import { api } from "../../../shared/api";
+  import { pondStore, pondsForSelect } from "../../../entities/pond";
+  import type { FeedSchedule } from "../../../shared/types";
 
   let schedules: FeedSchedule[] = [];
   let loading = false;
   let pagination = { page: 1, limit: 10, total: 0, totalPages: 0 };
-  
+
   let showModal = false;
   let editingSchedule: FeedSchedule | null = null;
   let deleteConfirm: FeedSchedule | null = null;
-  let successMessage = '';
-  
+  let successMessage = "";
+
   let formData = {
-    pondsId: '',
-    feedType: '',
+    pondsId: "",
+    feedType: "",
     feedAmount: 0,
-    feedTime: '07:00',
-    organizationId: 'org-001',
+    feedTime: "07:00",
+    organizationId: "org-001",
   };
 
   const feedTypes = [
-    { value: 'PF-500', label: 'PF-500' },
-    { value: 'PF-1000', label: 'PF-1000' },
-    { value: 'HI-PRO-VITE 781', label: 'HI-PRO-VITE 781 ' },
-    { value: 'HI-PRO-VITE 781-1', label: 'HI-PRO-VITE 781-1' },
-    { value: 'Pelet Tenggelam', label: 'Pelet Tenggelam' },
+    { value: "PF-500", label: "PF-500" },
+    { value: "PF-1000", label: "PF-1000" },
+    { value: "HI-PRO-VITE 781", label: "HI-PRO-VITE 781 " },
+    { value: "HI-PRO-VITE 781-1", label: "HI-PRO-VITE 781-1" },
+    { value: "HI-PRO-VITE 781-2", label: "HI-PRO-VITE 781-2" },
   ];
 
   onMount(async () => {
@@ -53,18 +62,18 @@
   }
 
   function getPondName(pondsId: string): string {
-    const pond = $pondStore.ponds.find(p => p.id === pondsId);
-    return pond?.name || '-';
+    const pond = $pondStore.ponds.find((p) => p.id === pondsId);
+    return pond?.name || "-";
   }
 
   function openCreateModal() {
     editingSchedule = null;
     formData = {
-      pondsId: '',
-      feedType: '',
+      pondsId: "",
+      feedType: "",
       feedAmount: 0,
-      feedTime: '07:00',
-      organizationId: 'org-001',
+      feedTime: "07:00",
+      organizationId: "org-001",
     };
     showModal = true;
   }
@@ -85,57 +94,62 @@
     if (editingSchedule) {
       const result = await api.updateFeedSchedule(editingSchedule.id, formData);
       if (result.success) {
-        successMessage = 'Jadwal pakan berhasil diperbarui';
+        successMessage = "Jadwal pakan berhasil diperbarui";
         await fetchSchedules(pagination.page);
         closeModal();
       }
     } else {
       const result = await api.createFeedSchedule(formData);
       if (result.success) {
-        successMessage = 'Jadwal pakan berhasil ditambahkan';
-        await fetchSchedules(pagination.page);
+        successMessage = "Jadwal pakan berhasil ditambahkan";
+        // Refresh first page so newly created item is visible immediately.
+        await fetchSchedules(1);
         closeModal();
       }
     }
     loading = false;
-    setTimeout(() => successMessage = '', 3000);
+    setTimeout(() => (successMessage = ""), 3000);
   }
 
   async function handleDelete() {
     if (deleteConfirm) {
       const result = await api.deleteFeedSchedule(deleteConfirm.id);
       if (result.success) {
-        successMessage = 'Jadwal pakan berhasil dihapus';
+        successMessage = "Jadwal pakan berhasil dihapus";
         await fetchSchedules(pagination.page);
         deleteConfirm = null;
       }
-      setTimeout(() => successMessage = '', 3000);
+      setTimeout(() => (successMessage = ""), 3000);
     }
   }
 
   function renderCell(item: unknown, key: string, value: unknown): string {
     const schedule = item as FeedSchedule;
-    if (key === 'pondsId') {
+    if (key === "pondsId") {
       return getPondName(schedule.pondsId);
     }
-    if (key === 'feedAmount') {
+    if (key === "feedAmount") {
       return `${schedule.feedAmount} kg`;
     }
-    return value != null ? String(value) : '-';
+    return value != null ? String(value) : "-";
   }
 
   const columns = [
-    { key: 'pondsId', label: 'Kolam' },
-    { key: 'feedType', label: 'Jenis Pakan' },
-    { key: 'feedAmount', label: 'Jumlah', align: 'right' as const },
-    { key: 'feedTime', label: 'Waktu', align: 'center' as const },
+    { key: "pondsId", label: "Kolam" },
+    { key: "feedType", label: "Jenis Pakan" },
+    { key: "feedAmount", label: "Jumlah", align: "right" as const },
+    { key: "feedTime", label: "Waktu", align: "center" as const },
   ];
 </script>
 
 <MainLayout currentPath="/feed-schedules" pageTitle="Jadwal Pakan">
   <div class="page">
     {#if successMessage}
-      <Alert variant="success" dismissible on:dismiss={() => successMessage = ''}>
+      <Alert
+        variant="success"
+        dismissible
+        on:dismiss={() => (successMessage = "")}
+      >
         {successMessage}
       </Alert>
     {/if}
@@ -143,7 +157,9 @@
     <div class="page-header">
       <div>
         <h2 class="page-title">Jadwal Pemberian Pakan</h2>
-        <p class="page-subtitle">Atur jadwal pemberian pakan untuk setiap kolam</p>
+        <p class="page-subtitle">
+          Atur jadwal pemberian pakan untuk setiap kolam
+        </p>
       </div>
       <Button on:click={openCreateModal}>
         <Plus size={18} />
@@ -155,18 +171,26 @@
       <Table {columns} data={schedules} {loading} {renderCell}>
         {#snippet actions({ item })}
           <div class="action-buttons">
-            <Button variant="ghost" size="sm" on:click={() => openEditModal(item as FeedSchedule)}>
+            <Button
+              variant="ghost"
+              size="sm"
+              on:click={() => openEditModal(item as FeedSchedule)}
+            >
               <Edit2 size={16} />
             </Button>
-            <Button variant="ghost" size="sm" on:click={() => deleteConfirm = item as FeedSchedule}>
+            <Button
+              variant="ghost"
+              size="sm"
+              on:click={() => (deleteConfirm = item as FeedSchedule)}
+            >
               <Trash2 size={16} />
             </Button>
           </div>
         {/snippet}
       </Table>
-      
+
       <div class="pagination-wrapper">
-        <Pagination 
+        <Pagination
           currentPage={pagination.page}
           totalPages={pagination.totalPages}
           totalItems={pagination.total}
@@ -177,7 +201,11 @@
     </Card>
   </div>
 
-  <Modal open={showModal} title={editingSchedule ? 'Edit Jadwal Pakan' : 'Tambah Jadwal Pakan'} on:close={closeModal}>
+  <Modal
+    open={showModal}
+    title={editingSchedule ? "Edit Jadwal Pakan" : "Tambah Jadwal Pakan"}
+    on:close={closeModal}
+  >
     <form class="form" on:submit|preventDefault={handleSubmit}>
       <Select
         label="Kolam"
@@ -209,15 +237,22 @@
     <div slot="footer">
       <Button variant="secondary" on:click={closeModal}>Batal</Button>
       <Button on:click={handleSubmit} {loading}>
-        {editingSchedule ? 'Simpan' : 'Tambah'}
+        {editingSchedule ? "Simpan" : "Tambah"}
       </Button>
     </div>
   </Modal>
 
-  <Modal open={!!deleteConfirm} title="Konfirmasi Hapus" size="sm" on:close={() => deleteConfirm = null}>
+  <Modal
+    open={!!deleteConfirm}
+    title="Konfirmasi Hapus"
+    size="sm"
+    on:close={() => (deleteConfirm = null)}
+  >
     <p>Apakah Anda yakin ingin menghapus jadwal pakan ini?</p>
     <div slot="footer">
-      <Button variant="secondary" on:click={() => deleteConfirm = null}>Batal</Button>
+      <Button variant="secondary" on:click={() => (deleteConfirm = null)}
+        >Batal</Button
+      >
       <Button variant="danger" on:click={handleDelete}>Hapus</Button>
     </div>
   </Modal>

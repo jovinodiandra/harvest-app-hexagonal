@@ -1,8 +1,9 @@
 package org.harvest.application.port.outbound;
 
 import org.harvest.application.dto.value.FeedPriceStatus;
-import org.harvest.shared.query.Pagination;
 import org.harvest.domain.FeedPrice;
+import org.harvest.domain.value.FeedName;
+import org.harvest.shared.query.Pagination;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,17 +15,17 @@ public interface FeedPriceRepository {
 
     void update(FeedPrice feedPrice);
 
-    void delete(FeedPrice feedPrice);
+//    void softDeleted(UUID id, UUID deletedBy, LocalDateTime deletedAt);
 
     Optional<FeedPrice> findById (UUID id);
 
-    Optional<FeedPrice> findByFeedNameAndStatus(String name, FeedPriceStatus status);
+    Optional<FeedPrice> findByFeedNameAndStatus(FeedName name, FeedPriceStatus status);
 
     void save(FeedPrice feedPrice);
 
-    List<FeedPrice> findAll(UUID organizationId, Pagination pagination);
+    List<FeedPrice> findAllByOrganizationId(UUID organizationId, Pagination pagination);
 
-    List<FeedPrice> findByStatus(FeedPriceStatus status);
+//    List<FeedPrice> findByStatus(FeedPriceStatus status);
 
-    boolean existActivePrice(String feedName);
+    boolean existByFeedNameAndStatus(FeedName feedName, FeedPriceStatus status);
 }

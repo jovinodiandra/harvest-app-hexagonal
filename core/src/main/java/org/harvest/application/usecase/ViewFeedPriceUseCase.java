@@ -27,11 +27,11 @@ public class ViewFeedPriceUseCase extends AuthenticationUseCase<ViewFeedPriceQue
 
     @Override
     protected ViewFeedPriceResult executeBusiness(ViewFeedPriceQuery query, UserSession userSession) {
-        if (userSession.getRole() != Role.OWNER || userSession.getRole() != Role.ADMIN) {
+        if (!(userSession.getRole() == Role.OWNER || userSession.getRole() == Role.ADMIN)) {
             throw new ValidationException("role must be owner and admin");
         }
         Pagination pagination = new Pagination(query.page(), query.limit());
-        List<FeedPrice> feedPriceList = feedPriceRepository.findAll(userSession.getOrganizationId(), pagination);
+        List<FeedPrice> feedPriceList = feedPriceRepository.findAllByOrganizationId(userSession.getOrganizationId(), pagination);
         return new ViewFeedPriceResult(feedPriceList);
     }
 

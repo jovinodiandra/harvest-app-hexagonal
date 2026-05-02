@@ -1,4 +1,4 @@
-package org.harvest.application.usecase;
+package org.harvest.application.usecase.death;
 
 import org.harvest.application.dto.query.ViewDeathRecordQuery;
 import org.harvest.application.dto.result.ViewDeathRecordResult;

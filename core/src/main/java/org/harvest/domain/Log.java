@@ -1,5 +1,8 @@
 package org.harvest.domain;
 
+import org.harvest.application.dto.value.LogCategory;
+import org.harvest.application.dto.value.LogLevel;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.Instant;

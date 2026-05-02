@@ -1,4 +1,4 @@
-package org.harvest.domain;
+package org.harvest.application.dto.value;
 
 public enum LogCategory {
     AUTHENTICATION,

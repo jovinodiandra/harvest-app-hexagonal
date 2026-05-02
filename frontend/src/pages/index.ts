@@ -3,6 +3,7 @@ export * from './auth';
 export * from './ponds';
 export * from './seeds';
 export * from './feed-schedules';
+export * from './feed-prices';
 export * from './growth-records';
 export * from './death-records';
 export * from './water-quality';
