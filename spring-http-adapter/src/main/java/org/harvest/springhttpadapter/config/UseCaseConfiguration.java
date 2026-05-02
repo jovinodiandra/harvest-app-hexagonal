@@ -7,7 +7,26 @@ import org.harvest.application.dto.result.*;
 import org.harvest.application.port.inbound.UseCase;
 import org.harvest.application.port.outbound.*;
 import org.harvest.application.port.outbound.security.SessionManager;
+import org.harvest.application.port.service.ReminderSchedulerService;
 import org.harvest.application.usecase.*;
+import org.harvest.application.usecase.contact.CreateContactUseCase;
+import org.harvest.application.usecase.contact.DeleteContactUseCase;
+import org.harvest.application.usecase.contact.UpdateContactUseCase;
+import org.harvest.application.usecase.contact.ViewContactUseCase;
+import org.harvest.application.usecase.death.CreateDeathRecordUseCase;
+import org.harvest.application.usecase.death.DeleteDeathRecordUseCase;
+import org.harvest.application.usecase.death.UpdateDeathRecordUseCase;
+import org.harvest.application.usecase.death.ViewDeathRecordUseCase;
+import org.harvest.application.usecase.diseases.CreateDiseasesRecordUseCase;
+import org.harvest.application.usecase.feed_price.CreateFeedPriceUseCase;
+import org.harvest.application.usecase.feed_reminder.CreateFeedReminderUseCase;
+import org.harvest.application.usecase.feed_schedule.CreateFeedScheduleUseCase;
+import org.harvest.application.usecase.finance.CreateFinanceRecordUseCase;
+import org.harvest.application.usecase.growth.CreateGrowthRecordUseCase;
+import org.harvest.application.usecase.harvest.CreateHarvestRecordUseCase;
+import org.harvest.application.usecase.harvest.CreateHarvestReminderUseCase;
+import org.harvest.application.usecase.pond.CreatePondsUseCase;
+import org.harvest.application.usecase.seed.CreateSeedUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -122,8 +141,8 @@ public class UseCaseConfiguration {
     }
 
     @Bean("createHarvestReminderUseCase")
-    public UseCase<CreateHarvestReminderCommand, CreateHarvestReminderResult> createHarvestReminderUseCase(HarvestReminderRepository harvestReminderRepository, PondsRepository pondsRepository) {
-        return new CreateHarvestReminderUseCase(harvestReminderRepository, pondsRepository);
+    public UseCase<CreateHarvestReminderCommand, CreateHarvestReminderResult> createHarvestReminderUseCase(HarvestReminderRepository harvestReminderRepository, PondsRepository pondsRepository, ReminderSchedulerService reminderSchedulerService) {
+        return new CreateHarvestReminderUseCase(harvestReminderRepository, pondsRepository, reminderSchedulerService);
     }
 
     @Bean("viewHarvestReminderUseCase")
@@ -132,13 +151,13 @@ public class UseCaseConfiguration {
     }
 
     @Bean("updateHarvestReminderUseCase")
-    public UseCase<UpdateHarvestReminderCommand, UpdateHarvestReminderResult> updateHarvestReminderUseCase(HarvestReminderRepository harvestReminderRepository, PondsRepository pondsRepository) {
-        return new UpdateHarvestReminderUseCase(harvestReminderRepository, pondsRepository);
+    public UseCase<UpdateHarvestReminderCommand, UpdateHarvestReminderResult> updateHarvestReminderUseCase(HarvestReminderRepository harvestReminderRepository, PondsRepository pondsRepository, ReminderSchedulerService reminderSchedulerService) {
+        return new UpdateHarvestReminderUseCase(harvestReminderRepository, pondsRepository, reminderSchedulerService);
     }
 
     @Bean("deleteHarvestReminderUseCase")
-    public UseCase<DeleteHarvestReminderCommand, DefaultResult> deleteHarvestReminderUseCase(HarvestReminderRepository harvestReminderRepository) {
-        return new DeleteHarvestReminderUseCase(harvestReminderRepository);
+    public UseCase<DeleteHarvestReminderCommand, DefaultResult> deleteHarvestReminderUseCase(HarvestReminderRepository harvestReminderRepository, ReminderSchedulerService reminderSchedulerService) {
+        return new DeleteHarvestReminderUseCase(harvestReminderRepository, reminderSchedulerService);
     }
 
     @Bean("createDiseasesRecordUseCase")
@@ -307,8 +326,8 @@ public class UseCaseConfiguration {
 
     // Feed Reminder Use Cases
     @Bean("createFeedReminderUseCase")
-    public UseCase<CreateFeedReminderCommand, CreateFeedReminderResult> createFeedReminderUseCase(FeedReminderRepository feedReminderRepository, PondsRepository pondsRepository) {
-        return new CreateFeedReminderUseCase(feedReminderRepository, pondsRepository);
+    public UseCase<CreateFeedReminderCommand, CreateFeedReminderResult> createFeedReminderUseCase(FeedReminderRepository feedReminderRepository, PondsRepository pondsRepository, ReminderSchedulerService reminderSchedulerService) {
+        return new CreateFeedReminderUseCase(feedReminderRepository, pondsRepository, reminderSchedulerService);
     }
 
     @Bean("viewFeedRemindersUseCase")
@@ -317,13 +336,24 @@ public class UseCaseConfiguration {
     }
 
     @Bean("updateFeedReminderUseCase")
-    public UseCase<UpdateFeedReminderCommand, UpdateFeedReminderResult> updateFeedReminderUseCase(FeedReminderRepository feedReminderRepository, PondsRepository pondsRepository) {
-        return new UpdateFeedReminderUseCase(feedReminderRepository, pondsRepository);
+    public UseCase<UpdateFeedReminderCommand, UpdateFeedReminderResult> updateFeedReminderUseCase(FeedReminderRepository feedReminderRepository, PondsRepository pondsRepository, ReminderSchedulerService reminderSchedulerService) {
+        return new UpdateFeedReminderUseCase(feedReminderRepository, pondsRepository, reminderSchedulerService);
     }
 
     @Bean("deleteFeedReminderUseCase")
-    public UseCase<DeleteFeedReminderCommand, DefaultResult> deleteFeedReminderUseCase(FeedReminderRepository feedReminderRepository) {
-        return new DeleteFeedReminderUseCase(feedReminderRepository);
+    public UseCase<DeleteFeedReminderCommand, DefaultResult> deleteFeedReminderUseCase(FeedReminderRepository feedReminderRepository, ReminderSchedulerService reminderSchedulerService) {
+        return new DeleteFeedReminderUseCase(feedReminderRepository, reminderSchedulerService);
+    }
+
+    // Feed Price use cases
+    @Bean("createFeedPriceUseCase")
+    public UseCase<CreateFeedPriceCommand, CreateFeedPriceResult> createFeedPriceUseCase(FeedPriceRepository feedPriceRepository){
+        return new CreateFeedPriceUseCase(feedPriceRepository);
+    }
+
+    @Bean("viewFeedPriceUseCase")
+    public UseCase<ViewFeedPriceQuery, ViewFeedPriceResult> viewFeedPriceUseCase(FeedPriceRepository feedPriceRepository){
+        return new ViewFeedPriceUseCase(feedPriceRepository);
     }
 }
 

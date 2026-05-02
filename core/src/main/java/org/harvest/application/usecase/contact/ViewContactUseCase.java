@@ -7,6 +7,7 @@ import org.harvest.application.port.outbound.ContactRepository;
 import org.harvest.application.port.outbound.security.UserSession;
 import org.harvest.domain.Contact;
 import org.harvest.shared.exception.ValidationException;
+import org.harvest.shared.query.Pagination;
 
 import java.util.List;
 
@@ -26,25 +27,18 @@ public class ViewContactUseCase extends AuthenticationUseCase<ViewContactQuery, 
 
     @Override
     protected ViewContactResult executeBusiness(ViewContactQuery command, UserSession userSession) {
-        int offset = (command.page() - 1) * command.limit();
-        List<Contact> contacts = contactRepository.findByFilter(command.supplierId(), command.name(), offset, command.limit());
+        Pagination pagination = new Pagination(command.page(), command.limit());
+        List<Contact> contacts = contactRepository.findByFilter(command.supplierId(), command.name(), pagination);
         return new ViewContactResult(contacts);
     }
 
     @Override
     protected void validateCommand(ViewContactQuery command) {
 
-        if (command.page() < 1) {
-            throw new ValidationException("Page must be greater than 0");
-        }
-        if (command.limit() < 1) {
-            throw new ValidationException("Limit must be greater than 0");
-        }
+
         if (command.supplierId() == null) {
             throw new ValidationException("Supplier Id cannot be null");
         }
-        if (command.limit() > 100) {
-            throw new ValidationException("Limit must be less than 100");
-        }
+
     }
 }

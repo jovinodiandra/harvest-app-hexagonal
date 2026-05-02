@@ -10,24 +10,8 @@ import org.harvest.logging.adapter.Slf4jLogAdapter;
 import org.harvest.notification.adapter.ConsoleNotificationAdapter;
 import org.harvest.notification.adapter.SmtpConfig;
 import org.harvest.notification.adapter.SmtpNotificationAdapter;
-import org.harvest.postgre.repository.PostgreContactRepository;
+import org.harvest.postgre.repository.*;
 import org.harvest.reminder.adapter.SimpleThreadReminderSchedulerAdapter;
-import org.harvest.postgre.repository.PostgreDeathRecordRepository;
-import org.harvest.postgre.repository.PostgreFeedReminderRepository;
-import org.harvest.postgre.repository.PostgreFeedScheduleRepository;
-import org.harvest.postgre.repository.PostgreFinanceRecordRepository;
-import org.harvest.postgre.repository.PostgreFishStatisticsRepository;
-import org.harvest.postgre.repository.PostgreGrowthChartRepository;
-import org.harvest.postgre.repository.PostgreGrowthRecordRepository;
-import org.harvest.postgre.repository.PostgreDiseasesRecordRepository;
-import org.harvest.postgre.repository.PostgreHarvestRecordRepository;
-import org.harvest.postgre.repository.PostgreHarvestReminderRepository;
-import org.harvest.postgre.repository.PostgreOrganizationRepository;
-import org.harvest.postgre.repository.PostgrePondsRepository;
-import org.harvest.postgre.repository.PostgreSeedRepository;
-import org.harvest.postgre.repository.PostgreSupplierRepository;
-import org.harvest.postgre.repository.PostgreUserRepository;
-import org.harvest.postgre.repository.PostgreWatterQualityRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -136,6 +120,11 @@ public class DependencyConfiguration {
     @Bean
     public FeedReminderRepository feedReminderRepository() {
         return new PostgreFeedReminderRepository();
+    }
+
+    @Bean
+    public FeedPriceRepository feedPriceRepository(){
+        return new PostgreFeedPriceRepository();
     }
 
     @Bean

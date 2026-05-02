@@ -41,7 +41,15 @@ public class CreateFeedPriceUseCase extends AuthenticationUseCase<CreateFeedPric
                 command.effectiveDate(),
                 userSession.getOrganizationId());
         feedPriceRepository.save(feedPrice);
-        return new CreateFeedPriceResult(feedPrice.getId(), feedPrice.getFeedName(), feedPrice.getPricePerKiloGram(), feedPrice.getEffectiveDate(), feedPrice.getStatus(),feedPrice.getDescription(), feedPrice.getCreatedAt());
+        return new CreateFeedPriceResult(
+                feedPrice.getId(),
+                feedPrice.getFeedName(),
+                feedPrice.getPricePerKiloGram(),
+                feedPrice.getEffectiveDate(),
+                feedPrice.getStatus(),
+                feedPrice.getDescription(),
+                feedPrice.getCreatedAt(),
+                feedPrice.getUpdatedAt());
     }
 
     @Override
