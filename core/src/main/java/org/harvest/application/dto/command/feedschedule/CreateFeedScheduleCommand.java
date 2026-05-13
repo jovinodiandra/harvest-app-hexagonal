@@ -1,9 +1,8 @@
-package org.harvest.application.dto.command;
+package org.harvest.application.dto.command.feedschedule;
 
 import org.harvest.application.port.outbound.security.UserSession;
 
 import java.math.BigDecimal;
-import java.sql.Time;
 import java.time.LocalTime;
 import java.util.UUID;
 

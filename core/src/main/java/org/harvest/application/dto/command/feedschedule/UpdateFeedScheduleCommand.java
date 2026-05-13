@@ -1,4 +1,4 @@
-package org.harvest.application.dto.command;
+package org.harvest.application.dto.command.feedschedule;
 
 import org.harvest.application.port.outbound.security.UserSession;
 
